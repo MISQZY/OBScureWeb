@@ -48,3 +48,13 @@ next-env.d.ts
 # content) and src/app/[lang]/docs/ (the docs route itself), silently
 # excluding both from every commit.
 /docs/
+
+# AI agent instruction files — local-only per .claude/CLAUDE.md's own
+# "no AI co-authorship" rule; kept out of the repo, at any depth (matches
+# both the root ones and .claude/CLAUDE.md itself). AGENTS.md in particular
+# is also regenerated on its own by `next dev`, so ignoring it is required,
+# not just preferred.
+**/CLAUDE.md
+**/AGENTS.md
+**/GEMINI.md
+**/.github/copilot-instructions.md
