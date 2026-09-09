@@ -1,0 +1,50 @@
+---
+title: Actions & Queues
+description: Chat commands, named actions, and the queues they run in — modeled on Streamer.bot
+appVersion: "0.5.1"
+---
+
+# Actions & Queues
+
+This system is modeled directly on Streamer.bot's own "Actions & Queues" — if you've used Streamer.bot before, the shape will already be familiar. It's built from three pieces: **Commands**, **Actions**, and **Queues**.
+
+## Commands  [#commands]
+
+A shared registry of chat commands, so you configure trigger words, an optional prefix, and permissions **once** and reuse the same command by name anywhere OBScure asks for one (Roulette's entry command, an Action's trigger).
+
+- **Trigger words** — one or more alias words that all fire the same command.
+- **Has prefix** / **Prefix** — e.g. requiring a leading `!`.
+- **Who can use it** — Everyone, Followers, or Subscribers.
+
+Manage commands from **Actions & Queues → Commands**.
+
+## Actions  [#actions]
+
+A named action plays one [Scene Builder](/en/docs/scene-builder) scene and lands in one of your Queues every time it fires.
+
+- **Scene** — which scene this action plays (create it in Scene Builder first — there's nothing to pick otherwise).
+- **Queue** — which queue this run lands in.
+- **Duration (sec)** — how long the queue considers this run "occupying" it before starting the next one in a blocking queue. There's no way to detect a scene's real on-screen finish from the main process, so this is a configured estimate you set to match your scene's actual animation length, not something measured automatically.
+- **Chat command** — pick a command from your registry to let chat trigger this action directly.
+- **Run from Streamer.bot** — an optional second trigger source, either:
+  - **Custom Event** — matches an **Event name** you pick; build a Streamer.bot Action with a "Raise Event" sub-action whose Event Name matches it.
+  - **Streamer.bot command** — matches a **Command name**, case-insensitive, against that Streamer.bot command's own Command field.
+
+Trigger an action manually any time with **Run**, independent of whether its chat command or Streamer.bot trigger fires.
+
+## Queues  [#queues]
+
+Every action lands in a queue — by default, a single "Default" queue that can't be deleted, though you can add more and repoint actions at them.
+
+- **Blocking** queue — runs actions one at a time, each occupying the queue for its own configured Duration before the next starts. Use this for anything that shouldn't visually overlap (alerts sharing the same screen area).
+- **Regular** (non-blocking) queue — fires every run the instant it's enqueued, in parallel. Use this for anything safe to show simultaneously.
+
+Each queue shows live **Pending** and **Completed** counts, updated the moment a run is enqueued, starts, completes, or the queue is paused/toggled — **Reset completed count** clears the counter without affecting anything queued. Pause a queue to stop it from starting new runs (already-running ones still finish); a paused Blocking queue still accepts new enqueues, it just won't start them until unpaused.
+
+You can't delete a queue actions still point at — repoint them to another queue first — and the Default queue can't be deleted at all.
+
+## Related
+
+- [Live Data → Event node](/en/docs/scene-builder/live-data-nodes#event) — an Event node's own Command kind picks from this same Commands registry, letting a Scene Builder scene arm itself directly off a chat command instead of (or alongside) an Action.
+- [Tools → Roulette](/en/docs/tools#roulette) — Roulette's own entry command is picked from this same registry.
+- [Streamer.bot integration](/en/docs/integrations/streamerbot) — required for the "Run from Streamer.bot" trigger source, and for a Streamer.bot-scoped Command/Custom Event to actually reach OBScure.

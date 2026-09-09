@@ -1,0 +1,49 @@
+---
+title: Getting Started
+description: Install OBScure, connect it to OBS, and understand profiles
+appVersion: "0.5.1"
+---
+
+# Getting Started
+
+## Installing OBScure
+
+OBScure is a Windows-only desktop app, built with `electron-vite` and packaged with `electron-builder`. You can install it as either:
+
+- **NSIS installer** — a normal Windows installer.
+- **Portable** — a single `.exe`, no installation, runs from wherever you put it.
+
+The app auto-updates itself once installed (via `electron-updater`) and shows a "What's new" dialog after an update with the release notes for the version you jumped from.
+
+## First launch: the walkthrough
+
+The first time you open OBScure, an on-screen walkthrough introduces the sidebar, the dashboard's integration status, and the overlay server address in Settings. You can bring it back any time from **Settings → Help → Show the walkthrough again**. Opening a scene in Scene Builder for the first time also offers its own, more detailed walkthrough of the node editor — click **Tutorial** in the scene editor's toolbar to replay it.
+
+## Connecting an overlay to OBS
+
+Every overlay OBScure builds is a normal web page, served by a small local HTTP/WebSocket server built into the app. To show one on stream:
+
+1. Open the **Overlays** section in the sidebar and select (or create) an overlay.
+2. In the scene editor's toolbar, copy the **OBS link** — this is the Browser Source URL, and it updates automatically if you change the overlay's URL key.
+3. In OBS, add a **Browser Source**, paste that URL in, and set its width/height to match your canvas (see [Canvas size](/en/docs/scene-builder#canvas-size) for how the editor's own preview relates to this).
+4. Build the overlay's content in Scene Builder — see [Scene Builder](/en/docs/scene-builder) for the node editor itself, and the node reference pages for what each node does.
+
+The host and port of this local server are shared by every overlay in the current profile — change them once in **Settings → Overlay server address**, and every Browser Source URL updates to match. If you widen the listening address beyond `127.0.0.1`, overlays become reachable from other devices on your local network with no authentication — only do this if you specifically need to reach an overlay from a second machine, and use this machine's real IP in OBS instead of the placeholder host shown in the app.
+
+## Connecting your services
+
+Nothing works with live data until you connect at least one integration — the Dashboard highlights connected services in green. Head to **Integrations** in the sidebar and see [Integrations](/en/docs/integrations) for a walkthrough of Twitch, YouTube, Spotify, Streamer.bot, OBS, and Windows Media, each with its own setup steps.
+
+## Profiles
+
+A **profile** is a complete, isolated set of overlays, integration tokens, and settings. You can keep up to a handful of profiles — for example, one per game or stream persona — and switch between them from the profile menu without restarting the app.
+
+- Switching profiles tears down and rebuilds your integrations (Spotify/Twitch/YouTube/Windows Media) and config for the new profile, but keeps the overlay server itself running — your OBS Browser Sources don't need to reconnect unless the new profile uses a different host/port.
+- Each profile gets its own avatar (upload a photo or just pick a color) so they're easy to tell apart in the switcher.
+- Deleting a profile permanently deletes all of its settings — there's no undo.
+
+Manage profiles from the profile menu → **Manage profiles...**.
+
+## Minimizing to tray
+
+By default, closing or minimizing the OBScure window just does what you'd expect on Windows. Turn on **Minimize to tray** in **Settings → Window** to change that: the Minimize and Close buttons instead hide the app into the system tray. Unlike a typical tray app, this fully closes the window (freeing its memory/CPU) rather than just hiding it — only the overlay server and your connected integrations keep running in the background, since none of them actually live inside the window itself. Reopen the app from its tray icon at any time.

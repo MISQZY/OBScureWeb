@@ -1,0 +1,19 @@
+---
+title: Windows Media
+description: Now-playing data from any local player, no auth needed
+appVersion: "0.5.1"
+---
+
+# Windows Media
+
+Shows the current track from whatever player is running on your PC — Spotify's own desktop app, a browser tab, VLC, and more — by reading Windows' System Media Transport Controls (SMTC). No authentication needed, and no separate account to connect.
+
+## Enabling
+
+Just flip **Enable integration** on. There are no other fields — OBScure polls the system media session every few seconds while it's on.
+
+Windows only: this integration does nothing on other platforms.
+
+## What you get once connected
+
+Exactly the same shape of data as [Spotify](/en/docs/integrations/spotify) — wire it into an [Audio Player node](/en/docs/scene-builder/live-data-nodes#audio-player) the same way, for `{artist}`/`{title}`/album art and track-change events. Use this instead of (or alongside) Spotify if you want Now Playing to reflect *whatever* is actually making sound on your PC, not specifically Spotify.

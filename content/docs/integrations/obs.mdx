@@ -1,0 +1,24 @@
+---
+title: OBS
+description: Connect to OBS's own WebSocket server for real-time audio levels
+appVersion: "0.5.1"
+---
+
+# OBS
+
+Connects to OBS's own built-in WebSocket server — reads real-time audio levels from your OBS audio mixer to drive an [Equalizer node](/en/docs/scene-builder/content-nodes#equalizer).
+
+## Connecting
+
+1. In OBS, open **Tools → WebSocket Server Settings** and enable the server.
+2. In OBScure, enter the same **Host** and **Port** shown in that dialog.
+3. Only set a **Password** if **Enable Authentication** is checked in that same OBS dialog.
+4. Click **Connect**.
+
+## What you get once connected
+
+- OBS's current audio mixer inputs (Desktop Audio, Mic/Aux, and so on) become selectable in an [Audio Source node](/en/docs/scene-builder/live-data-nodes#audio-source) (Source = OBS) — pick one there, then wire that Audio Source into an Equalizer's own Source socket.
+
+## Notes
+
+- obs-websocket only ever exposes a single peak/magnitude level per input, not a true frequency spectrum — an Equalizer driven by an OBS source is a *synthesized* pseudo-spectrum reacting to real loudness, not a genuine per-band analysis. For a true spectrum, use a real microphone/device in the Audio Source node instead (Source = Microphone/device), which OBScure analyzes itself.

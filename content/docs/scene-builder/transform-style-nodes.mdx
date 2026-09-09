@@ -1,0 +1,73 @@
+---
+title: Transform & Style Nodes
+description: Position, Size, Transform, Opacity, Shadow, Animation, Hide, Ordering, Spacing, Overflow
+appVersion: "0.5.1"
+---
+
+# Transform & Style Nodes
+
+These are modifiers — they carry no visual presence of their own, and only take effect once wired *into* a content node's **Transform** or **Style** socket (see [Scene Builder Concepts](/en/docs/scene-builder#input-sockets-are-grouped-by-role)). Wire several of the same group in at once when you need more than one; the most-recently-wired one wins on any field two of them both set.
+
+Three of these instead wire into a **container's own Layout socket** (Ordering) or work standalone (Spacing/Overflow, still Style-socket modifiers, just governing box model rather than look).
+
+## Transform group
+
+### Position  [#position]
+
+- **Mode** — Absolute (default) or Relative.
+- **Anchor** (absolute mode only) — one of the 9 standard anchor points (top-left, center, bottom-right, ...).
+- **Offset X / Offset Y** (absolute) or **Shift X / Shift Y** (relative) — pixels from the anchor, or a shift from the element's natural position.
+
+### Size  [#size]
+
+- **Width** / **Height** — leave empty for "auto" (the element's natural size).
+
+### Transform  [#transform]
+
+- **Scale X** / **Scale Y** (default 1), **Rotation** (degrees).
+
+## Style group
+
+### Opacity  [#opacity]
+
+A constant transparency (0–100%) applied to whatever it's wired into — a resting state, separate from Animation's fade transition. Wire into a Task's own Style socket too, to fade something in/out as one process step.
+
+### Shadow  [#shadow]
+
+A drop shadow — **Color**, **Opacity**, **Blur**, **Offset X**, **Offset Y**. Applied as a CSS `drop-shadow` filter (not a plain box-shadow), so it correctly follows a Shape's own clipped outline (circle/hexagon/diamond) instead of just boxing around it.
+
+### Animation  [#animation]
+
+- **Type** — None, Fade, Slide, Zoom, or Bounce.
+- **Duration** (ms).
+- **Sub-type** (when Type isn't None) — Auto (plays entrance on a Task's Show action and exit on Hide), In, or Out (pins the direction explicitly, overriding the Task's own action).
+
+### Hide  [#hide]
+
+A manual, static visibility toggle — **Hidden**, checked by default the moment you add this node. Flipping it and hitting Save takes effect live immediately, with no trigger involved — use this for something a human flips during a broadcast (a "BRB" panel), **not** for anything timed or event-driven. For an element that should show/hide automatically on an alert or as one process step, use a [Task](/en/docs/scene-builder/process-nodes#task)'s own Show/Hide action instead.
+
+### Overflow  [#overflow]
+
+Clips whatever it's wired into once its content exceeds its box — needs a Size (fixed width and/or height) on the same target to have anything to clip against.
+
+- **Clip X** / **Clip Y** — plain hidden/visible per axis (no scrollable mode; a Browser Source has no mouse/touch to actually use a scrollbar with).
+- **Auto-scroll** (Text only, for now) — a continuous, looping scroll instead, for content too long to fit (a Roulette Entrants list, say). **Direction** (up/down/left/right) picks the axis; **Speed** is px/second — a fixed reading pace regardless of how much content there is, not a fixed loop duration.
+
+### Spacing  [#spacing]
+
+Inside (**Padding**) and outside (**Margin**) space, wireable into any content node's Style socket — works on Text/Image/Video/Shape/widgets alike. Each group is one "set all sides" field plus an expand toggle for independent **Top/Right/Bottom/Left** values, Figma-style.
+
+## Layout group
+
+### Ordering  [#ordering]
+
+Wires into a container's own dedicated **Layout** socket (Shape, Group, Scene, Image, Video, and the Random/Roulette widgets all have one) to control how its children are arranged:
+
+- **Layout** — Horizontal or Vertical.
+- **Direction** — Direct or Revert (reverses the order).
+- **Gap** — spacing between children, in pixels.
+
+## Notes
+
+- Position/Size/Transform/Ordering all wire the same way whether their target is a top-level scene element or one Task is separately controlling mid-process — a Task's own Transform/Style sockets are a narrower version of the same grouping (Style there excludes Hide/Overflow/Spacing, since a Task's visibility is already its own Show/Hide action, and Overflow/Spacing are build-time-only concerns a process step can't override).
+- Build-time-only modifiers (Overflow, Spacing) apply once, at render time — they're never available in a Task's own Style socket, so a process step can't toggle them mid-sequence.

@@ -1,0 +1,38 @@
+---
+title: Profiles & Settings
+description: Window behavior, overlay server address, canvas size, appearance, and profiles
+appVersion: "0.5.1"
+---
+
+# Profiles & Settings
+
+## Profiles
+
+See [Getting Started → Profiles](/en/docs/getting-started#profiles) for the full picture — a profile bundles overlays, integration tokens, and settings into one switchable unit, managed from the profile menu in the title bar.
+
+## Settings
+
+All settings below are app-wide, not per-overlay, and live under **Settings** in the sidebar.
+
+### Window
+
+- **Minimize to tray** — see [Getting Started → Minimizing to tray](/en/docs/getting-started#minimizing-to-tray) for exactly what this does and why it fully closes the window rather than just hiding it.
+
+### Overlay server address  [#overlay-server-address]
+
+Host and port of the local server that serves every overlay page for OBS's Browser Source — shared by all of them at once, so changing it here updates every scene's OBS link together. Widening the host beyond `127.0.0.1` makes overlays reachable from other devices on your local network with **no authentication** — only do this if you need a second machine to reach an overlay, and use this machine's real LAN IP in OBS instead of the placeholder host.
+
+### Canvas  [#canvas]
+
+The stream canvas' default resolution and aspect ratio — used only to size overlay previews inside the app so their proportions match what OBS will actually show. It does **not** control the Browser Source's own size/position in OBS, which you set separately there. Any individual scene can override this default with its own custom canvas size — see [Scene Builder → Canvas size](/en/docs/scene-builder#canvas-size).
+
+### Appearance & language
+
+- **Color theme** — Light, Dark, or System.
+- **Interface language** — the app's own UI language (independent of which locale you're reading this documentation in).
+- **Custom themes/languages** — download an example config file to see the expected format, edit it, and upload it back to add your own theme or language. An invalid file (missing the required `mode`/`colors` or `dictionary` field) is rejected with an explanation.
+
+### Help
+
+- **Show the walkthrough again** — replays the app-wide onboarding tour from [Getting Started](/en/docs/getting-started#first-launch-the-walkthrough).
+- Scene Builder's own, more detailed walkthrough is separate — open any scene and click **Tutorial** in its toolbar.

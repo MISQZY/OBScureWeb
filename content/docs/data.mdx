@@ -1,0 +1,30 @@
+---
+title: Data
+description: Global variables and the live event log
+appVersion: "0.5.1"
+---
+
+# Data
+
+## Variables  [#variables]
+
+Named, typed values shared across **every** scene. Place a [Variable node](/en/docs/scene-builder/live-data-nodes#variable) in Scene Builder with Scope = Global and wire it to one of these — its value can then be typed as a `{name}` placeholder in any Text, or (Integer/Float only) wired into a Progress Bar's Current/Target sockets.
+
+- **Name** — also its template placeholder; must be unique.
+- **Type** — String, Boolean, Integer, or Float.
+- **Value** — edited directly here, or from any Variable node in Scene Builder that references it (both stay in sync, and push live to any already-open overlay Browser Source).
+
+Deleting a global variable leaves any Variable node still referencing it with no value (0/empty), rather than breaking — reassign or delete those nodes separately if needed.
+
+Manage global variables from **Data → Variables**.
+
+## Event Log  [#event-log]
+
+A live, running feed of what's happened inside the app recently (capped at the most recent 300 entries) — the same role Streamer.bot's own Events panel plays there. Covers alerts, chat messages, points redemptions, Random/Roulette state changes, Actions & Queues activity, custom overlay triggers, integration connect/disconnect status, and Streamer.bot triggers.
+
+Deliberately **excludes** the periodic state-snapshot broadcasts (now-playing, Twitch stats, Streamer.bot globals) — those fire on a fixed poll interval regardless of whether anything actually changed, not on a discrete occurrence, so they'd just be noise here.
+
+- **Pause** / **Resume** — freeze the feed without losing what's already shown.
+- **Clear** — empties the log.
+
+Use this as your first stop when something isn't firing the way you expect — it's the fastest way to see whether OBScure actually received the event you're expecting before digging into the scene/action that's supposed to react to it.

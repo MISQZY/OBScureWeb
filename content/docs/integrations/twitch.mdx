@@ -1,0 +1,32 @@
+---
+title: Twitch
+description: Connect Twitch for subscriptions, raids, follows, points, chat, and stats
+appVersion: "0.5.1"
+---
+
+# Twitch
+
+Detects subscriptions, raids, and follows on your channel, reads chat, watches for channel-points redemptions, and feeds Twitch stats (followers/subscribers/viewers, live status, category, uptime) to the Dashboard and to [integration-scoped Variables](/en/docs/scene-builder/live-data-nodes#variable).
+
+## Connecting
+
+A built-in Client ID is used by default — most people can just press **Connect** and approve access in the browser that opens. Only follow the steps below if you specifically want to use your own Twitch application instead:
+
+1. Open the [Twitch Developer Console](https://dev.twitch.tv/console/apps) and register an application.
+2. Set the app's **OAuth Redirect URL** to exactly `http://localhost:47891/callback/twitch`.
+3. Copy the app's **Client ID** into the Client ID field on this page.
+4. Click **Connect**.
+
+Twitch uses the **Device Code Grant** flow — the only Twitch OAuth flow that doesn't need a client secret, which is why a desktop app can ship a safe default Client ID at all. OBScure opens Twitch's own verification page in your browser; once you approve there, the app finishes the exchange on its own.
+
+## What you get once connected
+
+- **Event node** alert types: `subscription`, `raid`, `follow` — see [Live Data nodes](/en/docs/scene-builder/live-data-nodes#event).
+- **Channel points redemptions** — matched against your [Roulette entry settings](/en/docs/tools#roulette) and your [Actions](/en/docs/actions-and-queues) chat-command triggers.
+- **Chat** — read for chat-triggered [Commands](/en/docs/actions-and-queues#commands) (Roulette entry, Actions).
+- **Live stats** — followers, subscribers, viewers, live status/category/uptime, surfaced on the Dashboard and through a [Variable node](/en/docs/scene-builder/live-data-nodes#variable) with Scope = Integration.
+
+## Notes
+
+- Only run **one instance** of OBScure at a time. Twitch rotates its refresh token every time it's used — if a second (e.g. leftover) instance also holds a session and later saves its own config to disk, it can overwrite the working token with a stale one and silently break the connection until you reconnect.
+- Redemptions only count while the reward is actually enabled and visible in your Creator Dashboard.

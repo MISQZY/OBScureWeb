@@ -1,0 +1,42 @@
+---
+title: Interface Tour
+description: What each section of the OBScure sidebar does
+appVersion: "0.5.1"
+---
+
+# Interface Tour
+
+OBScure's sidebar is split into a few fixed sections, always in the same order.
+
+## Dashboard
+
+A grid of removable/re-addable cards giving an at-a-glance view of your stream: currently-playing track (Spotify/Windows Media) and Twitch stats (live status, viewer/follower/subscriber counts, category, uptime). Drag cards to reorder them; use **+** to add back a card you removed.
+
+## Overlays
+
+Your list of overlays (and folders of overlays), each one a separate scene graph built in **Scene Builder** — see the dedicated [Scene Builder](/en/docs/scene-builder) section for the node editor itself. Right-click an overlay or folder for rename/delete/icon options; folders can be nested for organizing a large overlay collection. Deleting a folder does **not** delete the overlays inside it.
+
+## Tools
+
+The live, running state of OBScure's two built-in on-stream games — **Random** and **Roulette**. This is where you configure range/count for Random or the entry command/points reward/duration for Roulette, and trigger rounds by hand. See [Tools](/en/docs/tools) for the full walkthrough, and the [Tools node reference](/en/docs/scene-builder/tools-nodes) for how to actually display them on an overlay.
+
+## Actions & Queues
+
+A shared registry of chat **Commands**, named **Actions** (each plays one Scene Builder scene and can be triggered by a chat command or from Streamer.bot), and the **Queues** each Action lands in. See [Actions & Queues](/en/docs/actions-and-queues).
+
+## Data
+
+- **Variables** — named, typed values shared across every scene (see [Data](/en/docs/data)).
+- **Event Log** — a live, running feed of everything happening inside the app (alerts, chat, redemptions, roulette/random state, action-queue activity, custom overlay triggers, integration status, Streamer.bot triggers).
+
+## Integrations
+
+One page per connectable service — **Twitch, YouTube, Spotify, Streamer.bot, OBS, Windows Media** — each showing its connection status and its own setup fields. See [Integrations](/en/docs/integrations) for what each one does and how to connect it.
+
+## Settings
+
+General, app-wide (not per-overlay) settings: window behavior, the overlay server's host/port, the stream canvas' reference resolution, appearance (theme/language, including uploading a custom theme or language file), and a link back to the onboarding walkthrough. See [Profiles & Settings](/en/docs/profiles-and-settings).
+
+## The profile switcher and title bar
+
+The title bar carries the profile switcher (see [Getting Started](/en/docs/getting-started#profiles)), a theme toggle (light/dark/system), and a language switcher for the app's own interface — independent of which locale you're reading these docs in.

@@ -1,0 +1,4 @@
+{
+  "title": "Интеграции",
+  "pages": ["index", "twitch", "youtube", "spotify", "streamerbot", "obs", "windows-media"]
+}

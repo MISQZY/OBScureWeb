@@ -1,0 +1,22 @@
+---
+title: Integrations
+description: Overview of every service OBScure can connect to
+appVersion: "0.5.1"
+---
+
+# Integrations
+
+Each integration page shows a connection status badge (**Connected**, **Connecting…**, **Not connected**, **Error**) and its own setup fields. Once connected, a service's data becomes available throughout the app — as an [Event node](/en/docs/scene-builder/live-data-nodes#event) trigger, an [integration-scoped Variable](/en/docs/scene-builder/live-data-nodes#variable), a Dashboard card, or an Actions & Queues trigger source.
+
+| Integration | What it's for | Auth |
+|---|---|---|
+| [Twitch](/en/docs/integrations/twitch) | Subscriptions, raids, follows, channel points, chat, live stats | OAuth device-code (no client secret) |
+| [YouTube](/en/docs/integrations/youtube) | Memberships, Super Chats | Google OAuth (Client ID + Secret) |
+| [Spotify](/en/docs/integrations/spotify) | Now-playing track data | OAuth + PKCE (no client secret) |
+| [Streamer.bot](/en/docs/integrations/streamerbot) | Global variables, chat commands, custom events for Actions | Local WebSocket, optional password |
+| [OBS](/en/docs/integrations/obs) | Real-time audio levels for the Equalizer node | Local WebSocket, optional password |
+| [Windows Media](/en/docs/integrations/windows-media) | Now-playing data from any local player (not just Spotify) | None — a toggle |
+
+Twitch, YouTube, and Spotify authenticate over OAuth in your system's default browser; OBScure runs a small local callback server (on port `47891`) purely to catch the redirect back from each provider once you approve access — nothing outside your machine ever talks to that server.
+
+Streamer.bot and OBS instead connect directly to a WebSocket server *you* run locally (Streamer.bot's own "Servers/Clients → WebSocket Server", or OBS's own "Tools → WebSocket Server Settings") — there's no OAuth involved, just a host/port and an optional password if you've turned authentication on at that end.

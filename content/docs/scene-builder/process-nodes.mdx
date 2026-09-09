@@ -1,0 +1,43 @@
+---
+title: Process Nodes
+description: Start, Task, Wait, Condition, End — the sequence-flow chain
+appVersion: "0.5.1"
+---
+
+# Process Nodes
+
+Process nodes build a `Start → Task → Wait → ... → End` **sequence-flow chain**, layered on top of the ordinary content graph (see [Two independent kinds of edges](/en/docs/scene-builder#two-independent-kinds-of-edges)). Use a chain instead of the simpler Event+Timer→Scene pattern when you need precise, multi-step timing — showing one element, waiting, updating it, waiting again, hiding it — rather than one flat show/hide window.
+
+## Start  [#start]
+
+The entry point. Wire a trigger into its own **Event** socket to pick what arms the whole sequence — an [Event node](/en/docs/scene-builder/live-data-nodes#event) (a real alert), or an Audio Player/Roulette/Random source's own Event output (arms on track change / round start / roll commit instead). A **Sound** or **Background FX** node wired here fires once at the very start. Its plain output is the first sequence-flow edge, into a Task or Wait.
+
+## Task  [#task]
+
+One step: shows, hides, or updates exactly **one** component.
+
+- **Target** socket — the Text/Image/Shape/Group/Video/Progress Bar/Roulette Widget this step acts on.
+- **Action** — Show, Hide, or Update.
+- **Transform** / **Style** sockets (a narrower version of the usual grouping — no Hide, since visibility is already this step's own Action; no Overflow/Spacing, which are build-time-only) — modifiers that apply *at the moment this step fires*, layered on top of the target's own base modifiers.
+- **Sound** socket — a one-shot cue for this specific step (distinct from Start's own Sound, which fires once at the very beginning). A sound needs a Target wired even for an otherwise-inert Update step, since that's what anchors the cue to this moment in the sequence.
+
+An Animation wired into a Show/Hide Task plays as that step's entrance/exit; on an Update step it's ignored (Update only ever changes Position/Size/Transform without touching visibility).
+
+## Wait  [#wait]
+
+A pause in the sequence — the delay (ms) between the previous step and the next. A process can have as many Wait nodes as it needs, each with its own delay.
+
+## Condition  [#condition]
+
+Branches the sequence in two, based on the triggering alert's own fields — the same `{user}`/`{amount}`/`{message}`/`{source}` vocabulary a Text placeholder already reads.
+
+- **Field** — Username, Amount, Message, or Platform.
+- **Is** — the comparison operator. Amount offers numeric operators (`=`, `≠`, `>`, `≥`, `<`, `≤`); the rest offer `=`, `≠`, `contains` (case-insensitive).
+- **Value** — a platform picker for the Platform field, free text otherwise.
+- **Then** / **Else** outputs — wire the next step to take for each branch.
+
+Only meaningful for a process armed by a real Event — one armed by Audio Player/Roulette/Random has no alert to check against, so it always takes **Else**, same as a field simply absent from a particular alert (e.g. `Amount` on a plain follow).
+
+## End  [#end]
+
+The exit point. Reaching it (via sequence flow from the last Task/Wait) tears the whole scene down — Background FX/Sound stop, and every Task-controlled component clears. No fields of its own. Not connecting an End at all still works — the chain is just walked until it runs out of steps.

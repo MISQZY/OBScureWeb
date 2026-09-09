@@ -1,0 +1,82 @@
+---
+title: Content Nodes
+description: Scene, Text, Image, Video, Shape, Group, Progress Bar, Equalizer, Random Pick
+appVersion: "0.5.1"
+---
+
+# Content Nodes
+
+Content nodes are what actually appears on screen. Most accept the same two grouped modifier sockets — **Transform** (Position/Size/Transform) and **Style** (Opacity/Shadow/Animation/Hide/Overflow/Spacing) — see [Transform & Style Nodes](/en/docs/scene-builder/transform-style-nodes). Nodes with their own **Content**/**As Target** output can be wired into a container's Children socket or a Task's own Target socket (see [Process Nodes](/en/docs/scene-builder/process-nodes)).
+
+## Scene  [#scene]
+
+The single sink every scene has — one per scene, can't be deleted. Only what's wired into its **Content** socket (directly, or via a Shape/Group) actually renders. It also has dedicated sockets for **Background FX**, **Sound**, **Layout** (Ordering, for arranging top-level content), **Event** (arms the whole scene show/hide), and **Timer** (how long an event-triggered scene stays up).
+
+## Text  [#text]
+
+Free-form styled text with placeholder support.
+
+- **Content** — the text itself; type `{name}` to insert a live placeholder (an Event's `{user}`/`{amount}`/`{message}`/`{source}`, a Variable's own name, `{time}` from a wired Clock, `{artist}`/`{title}` from a wired Audio Player, `{number}`/`{numbers}`/`{hash}`/`{seed}` from a wired Random source). The picker button next to the field lists only placeholders actually available given what's wired in.
+- **Color**, **Font** (any font installed on your system, or the overlay's default), **Size**, **Letter spacing**, **Line height**, **Align** (left/center/right), **Vertical** (top/middle/bottom), **Bold**/**Italic**.
+- **Outline** — width and color, off by default.
+- **Glow** — outer or inner, color, opacity, and blur, off by default.
+
+Wiring a **Roulette Entrants** node into Text's own Content socket *replaces* the template outright with that list's formatted rows — the textarea goes read-only while connected, but every styling field stays yours to edit. Wiring an **Audio Player** or **Random** source's Content output instead *merges into* the existing template (fills its placeholders), leaving the textarea fully editable.
+
+## Image  [#image]
+
+- **Image URL** — leave empty to show the current now-playing album art automatically; wire a Live Data node's Content output into the node's own Content socket for the same result, explicitly (the URL field goes read-only while connected).
+- **Upload** — copies a local file into the app's own writable storage, so it keeps working independent of any external URL staying online.
+- **Fit** — Cover (crop to fill, default), Contain, Stretch, Original size, or Repeat (tiled background instead of a plain image).
+- **Radius**, **Border** (width/color).
+
+An Image also doubles as a **container** — it has its own Children socket, so you can overlay a caption or badge Text node directly on top of the picture, same as a Shape. Defaults to 96×96 until a Size node overrides it.
+
+## Video  [#video]
+
+A short clip, URL only (no upload) — point it at a file already reachable over HTTP.
+
+- **Video URL**, **Radius**, **Border**.
+- **Loop** (on by default), **Muted** (on by default — browsers, including OBS's embedded Browser Source, block unmuted autoplay outright; pair with a [Sound node](/en/docs/scene-builder/live-data-nodes#sound) for reliable audio instead of unmuting this).
+
+Also a container, same as Image — wire content into its own Children socket to overlay it on the clip. Defaults to 320×180 until a Size node overrides it.
+
+## Shape  [#shape]
+
+A general-purpose background + border container (internally called "Box").
+
+- **Background** color (or gradient).
+- **Shape** — Rectangle (with its own Radius field), Pill, Circle, Hexagon, or Diamond (the last two clip to a polygon; a border still follows the original rectangle, not the clipped outline).
+- **Border** — width/color, off by default.
+
+No padding field of its own anymore — wire a [Spacing node](/en/docs/scene-builder/transform-style-nodes#spacing) into its Style socket instead. Has its own **Children** socket (any content node, including another Shape or Group) and **Layout** socket (an [Ordering node](/en/docs/scene-builder/transform-style-nodes#ordering) to arrange its children in a row/column).
+
+## Group  [#group]
+
+The same Children/Layout/Transform/Style sockets as Shape, minus every decorative field — no background, padding, corner shape, or border. An invisible wrapper purely for moving, animating, or handing a cluster of content to a Task as one unit without adding a visible card behind it.
+
+## Progress Bar  [#progress-bar]
+
+A goal/fill bar with no built-in data of its own — everything it shows comes from what's wired in:
+
+- **Current** / **Target** sockets — each accepts one [Variable node](/en/docs/scene-builder/live-data-nodes#variable) (Integer/Float); 0 when nothing's wired in.
+- **Label** socket — accepts one Text node, rendered with *that* node's own full styling (color/font/size/align/bold/italic), not a plain string.
+- Its own fields are purely the bar's look: **Orientation** (horizontal fills left-to-right, vertical fills bottom-to-top), **Bar color**, **Track color**, **Thickness**, **Radius**.
+
+## Equalizer  [#equalizer]
+
+A bar/wave/dot audio visualizer. Wire an [Audio Source node](/en/docs/scene-builder/live-data-nodes#audio-source) into its **Source** socket to say which capture device or OBS input drives it — the equalizer itself carries no audio logic, only its look:
+
+- **Style** — Bars, Wave, or Dots.
+- **Bars** (count, 2–96), **Color**, **Speed**, **Intensity**, **Radius**.
+
+Self-sizes at a fixed 240×80 until a Size node overrides it via its Transform socket. The in-editor preview animates randomly (real capture happens outside the editor window) — check it live with **Test**.
+
+## Random Pick  [#random-pick]
+
+A router, not a container — resolves to exactly **one** of its wired **Options** each time the scene shows, chosen fresh on every replay. Accepts the same content types a Shape's Children does, including nesting another Random Pick as one of its own options.
+
+- **Custom chance** off (default) — every connected Option has an equal shot.
+- **Custom chance** on — each Option gets its own editable weight (default 1; 0 excludes it entirely), with the computed percentage shown live next to it.
+
+Carries no size/position of its own — whichever Option gets picked keeps its own wiring (Transform/Style/Target) completely untouched, exactly as if it had been wired in directly.

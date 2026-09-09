@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
@@ -43,8 +43,19 @@ export function NodeBackground() {
     const colors = ['#eab308', '#3b82f6', '#22c55e', '#a855f7'];
 
     const init = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
+      const parent = canvas.parentElement;
+      if (!parent) return;
+
+      const newWidth = parent.clientWidth;
+      const newHeight = parent.clientHeight;
+      
+      // Only re-init if size significantly changed (or first time)
+      if (Math.abs(width - newWidth) < 10 && Math.abs(height - newHeight) < 10 && nodes.length > 0) {
+        return; 
+      }
+
+      width = newWidth;
+      height = newHeight;
       canvas.width = width;
       canvas.height = height;
 
@@ -67,7 +78,7 @@ export function NodeBackground() {
           x: Math.random() * (width - w),
           y: Math.random() * (height - h),
           w,
-          h: 44 + numLines * 16 + 8, // Calculate exact height needed
+          h: 44 + numLines * 16 + 8,
           color: colors[Math.floor(Math.random() * colors.length)],
           vx: (Math.random() - 0.5) * 0.06,
           vy: (Math.random() - 0.5) * 0.06,
@@ -203,7 +214,6 @@ export function NodeBackground() {
         // Draw header background (faint tint)
         ctx.fillStyle = n.color + '15'; 
         ctx.beginPath();
-        // Since we have a left border of 4px, let's start the header tint at 4px
         ctx.roundRect(n.x + 4, n.y, n.w - 4, 30, [0, 6, 0, 0]);
         ctx.fill();
 
@@ -256,12 +266,20 @@ export function NodeBackground() {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    window.addEventListener('resize', init);
+    // Use ResizeObserver for accurate sizing to prevent stretched elliptical handles
+    const observer = new ResizeObserver(() => {
+      init();
+    });
+    
+    if (canvas.parentElement) {
+      observer.observe(canvas.parentElement);
+    }
+    
     init();
     render();
 
     return () => {
-      window.removeEventListener('resize', init);
+      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, [resolvedTheme]);

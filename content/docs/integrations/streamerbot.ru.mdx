@@ -1,0 +1,27 @@
+---
+title: Streamer.bot
+description: Подключение Streamer.bot для глобальных переменных, команд и кастомных событий
+appVersion: "0.5.1"
+---
+
+# Streamer.bot
+
+Подключается к собственному WebSocket-серверу Streamer.bot — читает его глобальные переменные и слушает команды/события, которые могут запускать [Действия](/ru/docs/actions-and-queues).
+
+## Подключение
+
+1. В Streamer.bot включите WebSocket Server: **Servers/Clients → WebSocket Server**.
+2. В OBScure укажите те же **Host**, **Порт** и **Endpoint** (по умолчанию `/`), на которых слушает WebSocket Server в Streamer.bot.
+3. Указывайте **Пароль** только если в Streamer.bot для этого сервера включена авторизация.
+4. Нажмите **«Подключить»**.
+
+Здесь нет OAuth — это прямое локальное WebSocket-подключение. Если в ответ на `Hello` от Streamer.bot приходит соль для challenge, OBScure автоматически завершает шаг challenge/response `Authenticate`, используя указанный вами пароль.
+
+## Что становится доступно после подключения
+
+- **Глобальные переменные** — только для чтения, опрашиваются каждые ~5 секунд (в WebSocket API Streamer.bot нет push-уведомления о записи переменной и вообще нет способа *задать* её отсюда — для этого всё равно нужен Action в Streamer.bot со своим саб-экшеном «Set Global Variable»). Используйте как переменную со scope=integration в [ноде Variable](/ru/docs/scene-builder/live-data-nodes#variable) (Integration = Streamer.bot).
+- **Команды и Custom Events** как источник входа для [инструмента «Очередь»](/ru/docs/tools) и как триггер для [Действий](/ru/docs/actions-and-queues) — либо команда чата Streamer.bot (`Command.Triggered`), либо Custom Event, вызванное саб-экшеном «Raise Event» внутри Action в Streamer.bot.
+
+## Заметки
+
+- Каждое событие `Command.Triggered`/`Custom.Event` отправляется независимо от того, слушает ли его вообще что-то в OBScure — сопоставление с настроенными Действиями происходит на стороне OBScure, поэтому заранее объявлять в самом Streamer.bot, какие события вас интересуют, не нужно.

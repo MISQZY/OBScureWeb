@@ -1,0 +1,28 @@
+---
+title: Glossary
+description: Short definitions for terms used throughout these docs
+appVersion: "0.5.1"
+---
+
+# Glossary
+
+- **Overlay** — a web page served by OBScure, meant to be added to OBS as a Browser Source. Built visually as a *scene* in Scene Builder.
+- **Scene** — one node graph in Scene Builder; becomes exactly one overlay page. Also the name of the mandatory sink node every scene has.
+- **Node Editor / Scene Builder** — the visual, node-based UI for building a scene. See [Scene Builder](/en/docs/scene-builder).
+- **Node** — one visual building block in a scene graph — content (Text, Image...), a modifier (Position, Opacity...), a process step (Task, Wait...), or a live data source (Event, Variable...).
+- **Socket** — a labeled connection point on a node. Input sockets are grouped by *role* (Transform, Style) rather than one per node type; colors indicate kind (content/style/data/process).
+- **Data/composition edge** — a "feeds into" wire deciding what exists and how it's nested, flowing toward Scene.
+- **Sequence-flow edge** — a "then" wire in a `Start → Task → Wait → End` chain, deciding *when* things happen.
+- **Process** — a Start→Task→Wait→...→End chain for a step-by-step, precisely timed sequence. See [Process Nodes](/en/docs/scene-builder/process-nodes).
+- **Event-triggered scene** — the simpler `Event (+ Timer) → Scene` pattern: shows for a fixed window when an alert fires, no multi-step timing needed.
+- **URL key** — the slug identifying a scene's overlay address (`/overlays/<urlKey>.html`) on the local overlay server.
+- **Overlay server** — the local HTTP/WebSocket server, built into OBScure, that hosts every overlay page and pushes live updates to them.
+- **Integration** — a connection to an external service (Twitch, YouTube, Spotify, Streamer.bot, OBS, Windows Media). See [Integrations](/en/docs/integrations).
+- **Alert** — a real-time notification from a connected platform (a Twitch follow, a YouTube membership...), matched by an [Event node](/en/docs/scene-builder/live-data-nodes#event).
+- **Command** — a registered chat trigger word (with optional prefix and permission level) shared across Roulette entry, Actions, and Event nodes. See [Commands](/en/docs/actions-and-queues#commands).
+- **Action** — a named trigger that plays one scene and lands in a queue. See [Actions & Queues](/en/docs/actions-and-queues).
+- **Queue** — where an Action's runs land; Blocking runs them one at a time, a regular queue runs them all in parallel.
+- **Variable** — a named, typed value usable as a `{name}` template placeholder — local to one node, shared globally, or read live from a connected integration. See [Variable node](/en/docs/scene-builder/live-data-nodes#variable).
+- **Placeholder** — `{word}` syntax in a Text node's content, substituted at render time with a live value (an alert field, a Variable, the time, a now-playing track...).
+- **Profile** — an isolated, switchable set of overlays, integration tokens, and settings. See [Getting Started → Profiles](/en/docs/getting-started#profiles).
+- **Provably fair** — Random and Roulette's own guarantee: a result's hash is published before anyone could influence it, and the seed is revealed only after, so anyone can independently verify the outcome. See [Tools](/en/docs/tools).

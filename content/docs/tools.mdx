@@ -1,0 +1,44 @@
+---
+title: Tools
+description: Configuring the built-in Random and Roulette on-stream games
+appVersion: "0.5.1"
+---
+
+# Tools
+
+OBScure ships two on-stream games under **Tools** in the sidebar. Both are provably fair: a hash is published *before* anyone could influence or predict the outcome, and the seed behind it is only revealed afterward, so anyone can independently recompute the result and confirm it wasn't changed.
+
+This page covers configuring and running them from the app. To actually **display** the rolling numbers or spinning wheel on an overlay, see the [Tools node reference](/en/docs/scene-builder/tools-nodes) — placing a Random or Roulette node in Scene Builder surfaces exactly the live state described here.
+
+## Random  [#random]
+
+A random number generator with a hash shown below it.
+
+- **Range** — **From** / **To**.
+- **Count** — how many numbers to roll at once.
+- **Roll** — publishes the hash immediately (phase: hash published, waiting).
+- **Reveal result** — reveals the seed and the actual number(s).
+
+**How it's verified**: `number = min + (first 4 bytes of SHA-256(seed + ":" + index)) % (max − min + 1)`, with `index` starting from 0 for each rolled number. Since the hash is published before the reveal, anyone can recompute it themselves once the seed is out.
+
+A revealed result stays on screen indefinitely — there's no auto-clear timer, since that could otherwise make an announced number vanish from view while someone was still reading it. Roll again (**New round**) whenever you're ready to start the next one.
+
+## Roulette  [#roulette]
+
+A wheel with a countdown; chatters join by chat command or by redeeming a channel-points reward.
+
+- **Chat command** — picked from the shared [Commands registry](/en/docs/actions-and-queues#commands).
+- **Points reward** — a Twitch channel-points reward (requires [Twitch](/en/docs/integrations/twitch) connected; the list is pulled live from your channel). Each repeat redemption gives that viewer one additional ticket, growing their odds proportionally.
+- **Entry window** — how long entries stay open, in seconds/minutes/hours/days/weeks.
+- Both the chat command and the points reward are limited to whichever viewer types (Everyone/Followers/Subscribers) that command allows on the Commands page.
+- **Add manually** — add an entrant by name without needing chat or points at all.
+
+Round lifecycle: **Start round** opens entries for the configured window; **Start round now** ends the entry window early and picks immediately; **Cancel round** aborts without picking a winner.
+
+**How it's verified**: `SHA-256(seed)` is published the instant the round starts, before anyone could have entered. Once entries close, the seed is revealed, and `roll = parseInt(SHA-256(seed).slice(0, 8), 16) % totalWeight` — the winner is the first entrant, in join order, whose running weight total exceeds `roll`.
+
+## Related
+
+- [Tools node reference](/en/docs/scene-builder/tools-nodes) — wiring Random/Roulette's live state into an overlay.
+- [Actions & Queues](/en/docs/actions-and-queues) — the shared Commands registry both games' entry commands draw from.
+- [Data → Event Log](/en/docs/data#event-log) — every roll/round's state changes are recorded there live.

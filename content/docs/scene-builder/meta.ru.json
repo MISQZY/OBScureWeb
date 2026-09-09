@@ -1,0 +1,4 @@
+{
+  "title": "Scene Builder",
+  "pages": ["index", "content-nodes", "transform-style-nodes", "process-nodes", "live-data-nodes", "tools-nodes"]
+}

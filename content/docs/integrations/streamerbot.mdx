@@ -1,0 +1,27 @@
+---
+title: Streamer.bot
+description: Connect Streamer.bot for global variables, commands, and custom events
+appVersion: "0.5.1"
+---
+
+# Streamer.bot
+
+Connects to Streamer.bot's own WebSocket server — reads its global variables and listens for commands/events that can trigger [Actions](/en/docs/actions-and-queues).
+
+## Connecting
+
+1. In Streamer.bot, enable the WebSocket Server: **Servers/Clients → WebSocket Server**.
+2. In OBScure, fill in the same **Host**, **Port**, and **Endpoint** (default `/`) Streamer.bot's WebSocket Server is listening on.
+3. Only set a **Password** if you've turned authentication on for that server in Streamer.bot.
+4. Click **Connect**.
+
+There's no OAuth here — this is a direct local WebSocket connection. If a salted challenge comes back from Streamer.bot's own `Hello` message, OBScure completes the challenge/response `Authenticate` step automatically using the password you set.
+
+## What you get once connected
+
+- **Global variables** — read-only, polled every ~5 seconds (Streamer.bot's WebSocket API has no push notification for a variable write, and no way to *set* one from here — that still needs a Streamer.bot Action with its own "Set Global Variable" sub-action). Use one as an integration-scoped [Variable node](/en/docs/scene-builder/live-data-nodes#variable) (Integration = Streamer.bot).
+- **Commands & Custom Events** as an entry source for the [Queue tool](/en/docs/tools) and as a trigger for [Actions](/en/docs/actions-and-queues) — either a Streamer.bot chat command (`Command.Triggered`) or a Custom Event raised by a "Raise Event" sub-action inside a Streamer.bot Action.
+
+## Notes
+
+- Every `Command.Triggered`/`Custom.Event` push is emitted regardless of whether anything in OBScure is actually listening for it — matching against your configured Actions happens on the OBScure side, so you don't need to pre-declare which events you care about in Streamer.bot itself.

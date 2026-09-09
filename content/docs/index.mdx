@@ -1,0 +1,31 @@
+---
+title: Introduction
+description: What OBScure is and how these docs are organized
+appVersion: "0.5.1"
+---
+
+# Welcome to OBScure
+
+OBScure is a Windows desktop app (built on Electron) that acts as a control panel for your stream. It replaces a pile of separate browser-source overlays, alert widgets, and mini-game bots with one app that:
+
+- hosts your **overlays** — web pages you add to OBS as Browser Sources — built visually with a node-based **Scene Builder**, no HTML/CSS/JS required,
+- connects to **Twitch, YouTube, Spotify, Streamer.bot, OBS itself, and Windows' own media session** to pull in live alerts, chat, now-playing data, and stats,
+- ships two built-in on-stream games, **Random** and **Roulette**, with a provably-fair hash/seed reveal,
+- runs a reusable **Actions & Queues** system (modeled on Streamer.bot's own) for firing named scenes from chat commands or external triggers,
+- and keeps everything organized into **profiles** — separate sets of overlays, integrations, and settings you can switch between instantly.
+
+Everything OBScure serves to OBS is one local web server running on your own machine — nothing leaves your PC except the API calls each integration itself needs (Twitch, YouTube, Spotify).
+
+## How these docs are organized
+
+- **[Getting Started](/en/docs/getting-started)** — install the app, connect OBS, understand profiles.
+- **[Interface Tour](/en/docs/interface)** — what each section of the sidebar does.
+- **[Integrations](/en/docs/integrations)** — connecting Twitch, YouTube, Spotify, Streamer.bot, OBS, and Windows Media.
+- **[Scene Builder](/en/docs/scene-builder)** — the node editor: core concepts plus a full reference of every node type (content, transform/style, process, live data, tools).
+- **[Actions & Queues](/en/docs/actions-and-queues)** — chat commands, named actions, and how their queues work.
+- **[Tools](/en/docs/tools)** — configuring the Random and Roulette on-stream games.
+- **[Data](/en/docs/data)** — global variables and the live event log.
+- **[Profiles & Settings](/en/docs/profiles-and-settings)** — window behavior, overlay server address, canvas size, appearance.
+- **[Glossary](/en/docs/glossary)** — short definitions for terms used throughout these docs.
+
+If you've never opened OBScure before, start with Getting Started — it walks through installing the app and pointing OBS at your first overlay.

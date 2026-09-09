@@ -1,0 +1,25 @@
+---
+title: YouTube
+description: Подключение YouTube для членств и Super Chat
+appVersion: "0.5.1"
+---
+
+# YouTube
+
+Отслеживает членства канала и Super Chat на вашей трансляции.
+
+## Подключение
+
+В отличие от Twitch и Spotify, для YouTube нужен **свой собственный** OAuth-клиент — у Google нет аналога device-flow Twitch без client secret, поэтому у OBScure нет безопасного встроенного значения по умолчанию.
+
+1. Откройте [Google Cloud Console](https://console.cloud.google.com), создайте (или выберите) проект и создайте **OAuth-клиент** типа **Desktop app**.
+2. Скопируйте полученные **Client ID** и **Client Secret** в соответствующие поля на этой странице.
+3. Нажмите **«Подключить»**.
+
+OBScure запрашивает `access_type=offline` и `prompt=consent`, поэтому Google выдаёт новый refresh-токен при каждом подключении — без `prompt=consent` пользователь, уже выдававший доступ ранее, не получил бы свежий refresh-токен при повторном подключении, поскольку Google возвращает его только при *первом* согласии.
+
+## Что становится доступно после подключения
+
+- Типы алертов **ноды Event**: `membership`, `super-chat` — см. [«Ноды живых данных»](/ru/docs/scene-builder/live-data-nodes#event).
+
+У YouTube сегодня нет ленты статистики канала в реальном времени (в отличие от Twitch), поэтому он не предлагается как источник для [ноды Variable](/ru/docs/scene-builder/live-data-nodes#variable) со scope=integration.

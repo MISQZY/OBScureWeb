@@ -43,5 +43,8 @@ next-env.d.ts
 # fumadocs generated source
 .source/
 
-# Local knowledge base — not committed
-docs/
+# Local knowledge base — not committed. Anchored to the repo root: an
+# unanchored "docs/" also matches content/docs/ (the actual fumadocs site
+# content) and src/app/[lang]/docs/ (the docs route itself), silently
+# excluding both from every commit.
+/docs/

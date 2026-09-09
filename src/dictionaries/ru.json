@@ -5,10 +5,19 @@
     "soon": "Скоро"
   },
   "home": {
-    "title": "Прокачайте свой стрим с OBScure",
+    "title": "Прокачайте свой стрим\nс OBScure",
     "description": "Мощная панель управления для стримеров. Создавайте интерактивные оверлеи, мини-игры для зрителей и виджеты для OBS Studio без единой строчки кода.",
     "getStarted": "Перейти к документации",
     "templates": "Шаблоны",
-    "comingSoon": "Скоро"
+    "comingSoon": "Скоро",
+    "latestVersion": "Последняя версия",
+    "download": "Скачать",
+    "downloadInstaller": "Скачать Installer",
+    "downloadPortable": "Скачать Portable",
+    "previousVersions": "Предыдущие версии",
+    "viewOnGithub": "Посмотреть на GitHub",
+    "viewChangelog": "Посмотреть Changelog",
+    "changelogTitle": "Список изменений",
+    "noReleaseNotes": "Для этого релиза изменения не зафиксированы."
   }
 }

@@ -1,0 +1,45 @@
+---
+title: Tools Nodes
+description: Random and Roulette — wiring the built-in on-stream games into a scene
+appVersion: "0.5.1"
+---
+
+# Tools Nodes
+
+Random and Roulette aren't self-contained nodes — placing one only surfaces the **live state** of the matching app-level tool. The actual settings (range, count, entry command, points reward, duration...) live on that tool's own settings page under **Tools** in the sidebar — see [Tools](/en/docs/tools) for configuring them. This page covers how to *display* them on an overlay.
+
+Placing a Random or Roulette node from the palette automatically creates and permanently pairs a matching display widget alongside it — you never add the widget separately.
+
+## Random  [#random]
+
+The data/control node. Two outputs:
+
+- **Content** — wire into its own paired **Random Widget**'s Source socket (a permanent pairing), or into any content node's Content socket to fill `{number}`/`{numbers}`/`{hash}`/`{seed}` placeholders in an existing template.
+- **Event** — the roll's phase signal. Wire into a process's Start node to arm it the moment a roll is **committed** (a hash published, before the numbers are known), and/or into the paired Random Widget's own Visibility socket to hide that specific widget outside an active roll.
+
+### Random Widget  [#random-widget]
+
+The actual on-screen rolling numbers — a plain content node otherwise (same Transform/Style sockets and Content/As Target outputs as Text/Image), so it can be positioned, sized, animated, or handed to a Task like any of those. Shows unconditionally by default; wire the paired Random's own Event output into its optional **Visibility** socket to hide it outside an active roll instead. Has its own **Layout** socket (Ordering) for arranging multiple rolled numbers relative to each other once Count is above 1.
+
+Can't be deleted on its own — deleting the Random node it's paired with takes it with it.
+
+## Roulette  [#roulette]
+
+The data/control node. Two outputs:
+
+- **Content** — feeds its own paired Roulette Widget and (optional) Roulette Entrants list through their shared Source socket; not used for anything else.
+- **Event** — the round's phase signal. Wire into a process's Start node to arm it the moment a round starts collecting entries, and/or into the paired Roulette Widget's own Visibility socket to hide that specific widget outside an active round.
+
+### Roulette Widget  [#roulette-widget]
+
+The spinning wheel itself — same plain-content-node shape as Random Widget (Transform/Style/Content/As Target), positionable/animatable/Task-targetable like any other content. Shows unconditionally by default; wire the paired Roulette's Event output into its optional **Visibility** socket to hide it outside an active round instead. Can't be deleted on its own.
+
+### Roulette Entrants  [#roulette-entrants]
+
+An ordinary, **optional**, freely deletable data node that formats the paired Roulette's entrant list into rows — unlike the Widget, deleting it doesn't affect the Roulette or its Widget.
+
+- **Row template** — formats each entrant, using tokens `{name}`, `{chance}` (weighted win % 0–100), `{weight}` (raw entry count).
+- **Layout** — List (one row per line) or Inline (joined on one line by a **Separator**, e.g. "Alice, Bob, Carla").
+- **Sort by chance**.
+
+Wire its own Content output into a Text node's Content socket to *replace* that Text's template outright with the formatted rows (the textarea goes read-only while connected) — Color/Size/Font/Align and every other styling field stay that Text's own.

@@ -1,0 +1,15 @@
+{
+  "title": "Документация OBScure",
+  "pages": [
+    "index",
+    "getting-started",
+    "interface",
+    "integrations",
+    "scene-builder",
+    "actions-and-queues",
+    "tools",
+    "data",
+    "profiles-and-settings",
+    "glossary"
+  ]
+}

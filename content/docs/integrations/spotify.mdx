@@ -1,0 +1,28 @@
+---
+title: Spotify
+description: Connect Spotify for now-playing track data
+appVersion: "0.5.1"
+---
+
+# Spotify
+
+Tracks your current Spotify play state — track, artist, album art, playing/paused — for use as a Now Playing overlay or Dashboard card.
+
+## Connecting
+
+1. Open the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) and create an app.
+2. In the app's settings, add this exact Redirect URI: `http://127.0.0.1:47891/callback/spotify`.
+3. Copy the app's **Client ID** into the field on this page.
+4. Click **Connect**.
+
+Spotify uses OAuth's authorization-code + **PKCE** flow, so no client secret is needed — safe for a distributed desktop app.
+
+## What you get once connected
+
+- Live now-playing data, exposed to Scene Builder through the [Audio Player node](/en/docs/scene-builder/live-data-nodes#audio-player) — wire its Content output into a Text node for `{artist}`/`{title}`, or into an Image node for live album art, and its Event output into Start or Scene to trigger on track change.
+- A Now Playing card on the Dashboard.
+
+## Notes
+
+- OBScure polls `currently-playing` every 5 seconds once connected, and refreshes the access token proactively 5 seconds before it would expire (rather than waiting for a failed request) — so a poll never lands right on the refresh boundary.
+- If you also use [Windows Media](/en/docs/integrations/windows-media), note that it reads whatever's playing at the OS level (which may include Spotify) — the two are independent data sources feeding the same shape of Now Playing data, use whichever fits your setup.

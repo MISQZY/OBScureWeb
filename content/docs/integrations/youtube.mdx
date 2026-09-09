@@ -1,0 +1,25 @@
+---
+title: YouTube
+description: Connect YouTube for memberships and Super Chats
+appVersion: "0.5.1"
+---
+
+# YouTube
+
+Detects channel memberships and Super Chats on your live stream.
+
+## Connecting
+
+Unlike Twitch and Spotify, YouTube needs **your own** OAuth client — Google doesn't offer an equivalent of Twitch's client-secret-free device flow, so there's no safe built-in default OBScure can ship with.
+
+1. Open [Google Cloud Console](https://console.cloud.google.com), create (or pick) a project, and create an **OAuth client** of type **Desktop app**.
+2. Copy the generated **Client ID** and **Client Secret** into the matching fields on this page.
+3. Click **Connect**.
+
+OBScure requests `access_type=offline` and `prompt=consent`, so Google reissues a refresh token on every connect — without `prompt=consent`, a user who already granted access before wouldn't get a fresh refresh token back on a later reconnect, since Google only ever returns one on the *first* consent.
+
+## What you get once connected
+
+- **Event node** alert types: `membership`, `super-chat` — see [Live Data nodes](/en/docs/scene-builder/live-data-nodes#event).
+
+YouTube has no live channel-stats feed today (unlike Twitch), so it isn't offered as a source for an integration-scoped [Variable node](/en/docs/scene-builder/live-data-nodes#variable).

@@ -5,10 +5,19 @@
     "soon": "Soon"
   },
   "home": {
-    "title": "Supercharge your stream with OBScure",
+    "title": "Supercharge your stream\nwith OBScure",
     "description": "A powerful control panel for streamers. Visually create interactive overlays, viewer mini-games, and widgets for OBS Studio without writing a single line of code.",
     "getStarted": "Read the Docs",
     "templates": "Templates",
-    "comingSoon": "Soon"
+    "comingSoon": "Soon",
+    "latestVersion": "Latest Version",
+    "download": "Download",
+    "downloadInstaller": "Download Installer",
+    "downloadPortable": "Download Portable",
+    "previousVersions": "Previous Versions",
+    "viewOnGithub": "View on GitHub",
+    "viewChangelog": "View Changelog",
+    "changelogTitle": "Changelog",
+    "noReleaseNotes": "No changes recorded for this release."
   }
 }

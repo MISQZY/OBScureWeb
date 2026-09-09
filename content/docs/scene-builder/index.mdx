@@ -1,0 +1,81 @@
+---
+title: Scene Builder Concepts
+description: How the node editor works — the core mental model before the node reference
+appVersion: "0.5.1"
+---
+
+# Scene Builder Concepts
+
+Every overlay in OBScure is one **scene** — a node graph you build in Scene Builder that becomes one Browser Source page in OBS. This page covers the mental model; the node-by-node reference lives in the pages that follow ([Content](/en/docs/scene-builder/content-nodes), [Transform & Style](/en/docs/scene-builder/transform-style-nodes), [Process](/en/docs/scene-builder/process-nodes), [Live Data](/en/docs/scene-builder/live-data-nodes), [Tools](/en/docs/scene-builder/tools-nodes)).
+
+## Adding and wiring nodes
+
+Click **Add Node** to open the palette, grouped by the same sections as the reference pages. Click a group to expand it, then a node to drop it on the canvas.
+
+To connect two nodes, drag from the dot on a node's **right** edge to a socket on another node's **left** edge. A socket's color tells you what it accepts:
+
+- 🟢 **green (content)** — Text, Image, Video, Shape, Group, and similar placeable content
+- 🟡 **amber (style)** — a style/transform modifier (Position, Size, Opacity, Animation, ...)
+- 🔵 **sky blue (data)** — a live data/control signal (Event, Audio Player, Variable, ...)
+- 🟣 **indigo (process)** — the Start→Task→Wait→End sequence-flow chain
+
+Nothing renders until it's reachable from the **Scene** node — the single, undeletable sink every scene has. A node placed on the canvas but not wired into anything shows a "not wired into rendering yet" notice.
+
+## Two independent kinds of edges
+
+The graph carries two unrelated wiring systems at once, and it's worth keeping them straight:
+
+1. **Data/composition edges** ("feeds into" / "modifies") — everything flows left-to-right toward Scene. Text/Image feed into an optional Shape/Group; those feed into Scene; **modifier** nodes (Position, Size, Animation, Hide, ...) have an output only, wired *into* whatever they affect rather than the other way around. This decides **what exists** and how it's nested.
+2. **Sequence-flow edges** ("then") — a `Start → Task → Wait → ... → End` chain, layered on top of the structural graph above. This decides **when** things happen. A Task's own Target must still separately reach Scene through the structural graph to render at all — sequence flow alone doesn't place anything on screen.
+
+## Input sockets are grouped by role
+
+Rather than one socket per node type, related modifiers share one socket grouped by **role** — Blender-modifier-stack style:
+
+- **Transform** — accepts any mix of Position, Size, and Transform (scale/rotate) nodes.
+- **Style** — accepts any mix of Opacity, Shadow, Animation, Hide, Overflow, and Spacing nodes.
+
+Both are `multi`, so you can wire in several at once (even two of the same type). If two wires in the same group set the same field, whichever was wired **most recently wins** — reorder priority with the numbered badge that appears on a node once several wires compete, the same idea as a later modifier overriding an earlier one in a modifier stack. Click the badge to move a node to the end of the priority order; right-click it to set a specific position.
+
+## Node categories
+
+Every node's header tint and left accent stripe match one of five categories (this is coarser than the Add Node palette's own grouping — several palette sections share one category color):
+
+- **Process** (indigo) — Start, Task, Wait, Condition, End: the sequence-flow chain.
+- **Content** (emerald) — Scene, Text, Image, Video, Shape, Group, Random Pick, and the auto-paired Random/Roulette widgets: what exists and how it's nested.
+- **Style** (amber) — Position, Size, Transform, Animation, Opacity, Shadow, Hide, Overflow, Spacing, Ordering: per-component modifiers wired into a specific target.
+- **Data** (sky blue) — Event, Audio Player, Audio Source, Sound, Timer, Background FX, Clock, Variable, and the Random/Roulette source nodes: self-contained accessories and live signal feeds.
+- **Utils** (slate) — the Layout Frame, a purely visual grouping box for organizing a large graph (collapse it to tidy the canvas — wires to hidden children reroute to the frame's own edge as a visual anchor).
+
+## Three scene patterns
+
+A scene can combine these, but most fall cleanly into one of three shapes:
+
+- **Static** — always on screen. Just wire content straight into Scene with no Event/Timer/process involved.
+- **Event-triggered** — an [Event node](/en/docs/scene-builder/live-data-nodes#event) (or Audio Player/Roulette/Random's own Event output) wired into Scene's own Event socket shows the scene when that alert fires. Wire a [Timer node](/en/docs/scene-builder/live-data-nodes#timer) into Scene too to control how long (ms) it stays up before auto-hiding — with no Timer, it falls back to a fixed 6 seconds.
+- **Process** — a `Start → Task → Wait → ... → End` chain for a step-by-step sequence with precise timing and its own animation per step. Start's own Event socket picks what arms the sequence; each Task shows, hides, or updates exactly one component (wired into that Task's own Target socket), with its own Position/Size/Transform/Opacity/Shadow/Animation modifiers layered on top of that component's base ones at the moment the step fires. A [Condition node](/en/docs/scene-builder/process-nodes#condition) can branch the sequence in two based on the triggering alert's own fields.
+
+## Preview, Save, and Test
+
+The editor's preview panel shows how the scene will look in OBS, matching your configured canvas resolution (see [Canvas size](#canvas-size) below). The ▶ **Play** button replays animations and sound locally, without needing a real event.
+
+**Save** and **Test** are not the same thing:
+
+- **Save** persists the graph silently — no replayed animations, no Background FX replay.
+- **Test** pushes the current graph — including unsaved changes — to a real, already-open Browser Source and replays its entrance, so you can check it live before committing to Save.
+
+## The OBS link and URL key
+
+Each scene has a **URL key**, and its Browser Source address is `/overlays/<urlKey>.html` on your [overlay server](/en/docs/profiles-and-settings#overlay-server-address). Copy the link from the editor toolbar into OBS's Browser Source; it updates automatically the moment you change the URL key.
+
+## Canvas size  [#canvas-size]
+
+The **canvas size** button in the toolbar sets the reference resolution this scene's nodes are positioned against in the editor and preview — it does **not** control the actual size/position of the Browser Source in OBS, which you configure separately in OBS itself. By default every scene shares one canvas size set in **Settings → Canvas**; toggle "Custom size for this scene" to override it per scene (useful for an overlay meant for a different aspect ratio than your main canvas).
+
+## Export / Import
+
+Use **Export scene** / **Import scene** in the toolbar to save a scene's graph to a file and load it elsewhere (another profile, another machine, or to make a backup before a risky edit). An import warns you if the file was exported from a different app version, since node shapes can change between versions.
+
+## Organizing a large graph
+
+Drop a **Layout Frame** (Utils group) to group a cluster of nodes visually — purely cosmetic, it carries no sockets of its own. Click its header to collapse it down to just the title, hiding its children and rerouting any of their external wires to the frame's own edge as a visual anchor. Use **Prettify** in the toolbar to auto-arrange the whole graph for readability; it only rearranges nodes locally in the editor, so Save afterward to keep the new layout.

@@ -1,0 +1,69 @@
+---
+title: Live Data Nodes
+description: Event, Sound, Timer, Background FX, Audio Player, Audio Source, Clock, Variable
+appVersion: "0.5.1"
+---
+
+# Live Data Nodes
+
+Self-contained accessories and live signal feeds. Most wire into **Scene** or **Start**'s own dedicated sockets rather than a content node's Transform/Style groups.
+
+## Event  [#event]
+
+Matches a real alert, or a chat command, to arm a scene or process.
+
+- **Kind** — Alert (a platform notification) or Command (a chat command from the shared [Commands registry](/en/docs/actions-and-queues#commands)).
+- For Alert: **Type** (which connected platform — Twitch or YouTube; only platforms currently connected are offered) and **Sub-type** (the specific alert: Twitch → `subscription`/`raid`/`follow`, YouTube → `membership`/`super-chat`).
+- For Command: pick one from your Commands registry.
+
+Wire into Scene's own Event socket for the simple show/hide pattern, or into Start for a full process. An armed alert exposes `{user}`/`{amount}`/`{message}`/`{source}` to any Text placeholder in the scene and to [Condition](/en/docs/scene-builder/process-nodes#condition) nodes.
+
+## Sound  [#sound]
+
+A one-shot alert sound. Wire into Scene (fires when the scene shows) or into Start/a Task (fires at that point in a process).
+
+- **Sound** — a bundled preset, or your own uploaded file (persists independently of the node/scene until removed).
+- **Volume**.
+
+## Timer  [#timer]
+
+Wired into Scene alongside an Event node, its **Delay (ms)** is how long an event-triggered scene stays visible before auto-hiding. With nothing wired into Scene's Timer socket, an event-triggered scene falls back to a fixed 6000ms. (The same delay field, used inline inside a process chain instead, is the separate [Wait node](/en/docs/scene-builder/process-nodes#wait).)
+
+## Background FX  [#background-fx]
+
+A full-viewport ambient layer, wired into Start or Scene's own **Background FX** socket — a scene/process-level accessory, not a per-component modifier.
+
+- **Type** — None, Gradient, Pulse, Stars, Vignette (a static radial tint toward the edges), Paratrooper, or Airdrop.
+- **Color**, **Speed** (0.5–2.5).
+- **Paratrooper**/**Airdrop** only: a one-shot DOM animation (a pixel-art soldier parachuting in and running off, or a supply crate parachuting down and venting colored smoke) rather than a plain CSS pattern. **Repeat** — off (default) drops it once, replay with Play/Test; on keeps dropping one at a time for as long as the scene shows. Its own **Caption** socket accepts a Text node to label the nickname tag (Paratrooper) or crate label (Airdrop) with that node's plain text.
+
+## Audio Player  [#audio-player]
+
+Live now-playing data from Spotify or Windows Media — no fields of its own, just two outputs, each meaningful depending on where you wire it:
+
+- **Content** — wire into a Text node's Content socket to fill its `{artist}`/`{title}` placeholders, or into an Image node's Content socket to show the live album art unconditionally.
+- **Event** — wire into Scene's Event socket to make the whole scene continuously data-driven (visible for as long as something is playing, no Timer needed) and arm scene-wide `{title}`/`{artist}`/album-art placeholders; and/or into a Start node's Event socket to arm a process on every track change instead of a real alert. Both at once is fine — they're independent sockets.
+
+## Audio Source  [#audio-source]
+
+Names which audio input an [Equalizer](/en/docs/scene-builder/content-nodes#equalizer) reacts to — carries no audio itself, just the choice of where to get it:
+
+- **Source** toggle — **Microphone/device** (a real local capture device, analyzed continuously inside the app itself — keeps working even minimized to tray) or **OBS audio source** (one of OBS's own mixer inputs, read via the [OBS integration](/en/docs/integrations/obs); a synthesized pseudo-spectrum from loudness, not a true per-band analysis).
+- Optionally, wire an **Audio Player**'s Content output into this node's own (optional) Content socket instead — the Equalizer then just pulses while something is playing, no microphone or OBS connection needed at all.
+
+## Clock  [#clock]
+
+A live `{time}` placeholder — no visual presence of its own. Wire its **Content** output into a Text node's Content socket and use `{time}` in that Text's own template; the receiving Text's own styling applies, nothing here.
+
+- **Format** — free text using tokens `YYYY`, `MM`, `DD`, `HH` (24h), `hh` (12h), `mm`, `ss`, `A` (AM/PM); anything else (colons, dots, labels) passes through literally, e.g. `HH:mm:ss` or `DD.MM.YYYY HH:mm`.
+
+## Variable  [#variable]
+
+A single named, typed value — registers `{name}` as a template placeholder any Text in the scene can use, and (Integer/Float only) can be wired into a [Progress Bar](/en/docs/scene-builder/content-nodes#progress-bar)'s Current/Target sockets.
+
+- **Scope: Local** (default) — name and value both live on this node directly.
+- **Scope: Global** — name and value instead come from a variable registered on the [Data → Variables page](/en/docs/data#variables); the same entry then updates everywhere it's referenced, across every scene, live in an already-open Browser Source too.
+- **Scope: Integration** — the value is read live from a connected integration instead (read-only): a numeric Twitch stat (**followers**/**subscribers**/**viewers**) or a live [Streamer.bot global variable](/en/docs/integrations/streamerbot). Only integrations currently connected are offered.
+- **Type** (Local/Global only) — String, Boolean, Integer, or Float.
+
+A string/boolean value wired into a Progress Bar's Current/Target is coerced to a number the same way switching its own Type to Integer/Float would.

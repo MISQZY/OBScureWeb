@@ -75,8 +75,9 @@ export function SiteHeader({ lang, nav }: SiteHeaderProps) {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1">
           {lang && <LangSwitcher currentLang={lang} />}
+          <div className="h-4 w-px bg-border mx-1" />
           <ThemeToggle />
         </div>
       </div>
