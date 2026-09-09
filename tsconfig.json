@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/.source": ["./.source/server.ts"],
+      "@/.source/server": ["./.source/server"],
+      "@/.source/browser": ["./.source/browser"],
+      "@/.source/dynamic": ["./.source/dynamic"]
     }
   },
   "include": [

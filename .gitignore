@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# fumadocs generated source
+.source/
+
+# Local knowledge base — not committed
+docs/

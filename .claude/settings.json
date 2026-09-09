@@ -1,0 +1,10 @@
+﻿{
+  "version": 1,
+  "rules": [
+    {
+      "id": "no-ai-coauthorship",
+      "description": "Never add AI co-authorship annotations to files or commits",
+      "enforce": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "documentation": "Documentation",
+    "templates": "Templates",
+    "soon": "Soon"
+  },
+  "home": {
+    "title": "OBScure Documentation",
+    "description": "Everything you need to build, configure, and extend OBScure — the Electron application built for power users.",
+    "getStarted": "Get Started",
+    "templates": "Templates",
+    "comingSoon": "Coming Soon"
+  }
+}

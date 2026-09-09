@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "documentation": "Документация",
+    "templates": "Шаблоны",
+    "soon": "Скоро"
+  },
+  "home": {
+    "title": "Документация OBScure",
+    "description": "Всё, что нужно для настройки и расширения OBScure — Electron-приложения для опытных пользователей.",
+    "getStarted": "Начать",
+    "templates": "Шаблоны",
+    "comingSoon": "Скоро"
+  }
+}
