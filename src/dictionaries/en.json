@@ -5,10 +5,10 @@
     "soon": "Soon"
   },
   "home": {
-    "title": "OBScure Documentation",
-    "description": "Everything you need to build, configure, and extend OBScure — the Electron application built for power users.",
-    "getStarted": "Get Started",
+    "title": "Supercharge your stream with OBScure",
+    "description": "A powerful control panel for streamers. Visually create interactive overlays, viewer mini-games, and widgets for OBS Studio without writing a single line of code.",
+    "getStarted": "Read the Docs",
     "templates": "Templates",
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Soon"
   }
 }
