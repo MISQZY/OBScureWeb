@@ -285,7 +285,7 @@ export function NodeBackground() {
   }, [resolvedTheme]);
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none [mask-image:linear-gradient(to_bottom,white_30%,transparent_100%)]">
+    <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none mask-[linear-gradient(to_bottom,white_30%,transparent_100%)]">
       <canvas ref={canvasRef} className="block w-full h-full opacity-80" />
     </div>
   );

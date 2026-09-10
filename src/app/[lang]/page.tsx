@@ -31,7 +31,7 @@ export default async function LocalizedHomePage({ params }: PageProps<'/[lang]'>
         <section className="container relative z-10 mx-auto flex flex-col items-center gap-8 px-4 pt-32 pb-16 text-center">
           {/* Subtle glow/blur backdrop behind the text to ensure readability against the moving nodes */}
           <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
-            <div className="w-[80vw] max-w-[800px] h-[50vh] bg-background/80 blur-[80px] rounded-full" />
+            <div className="w-[80vw] max-w-200 h-[50vh] bg-background/80 blur-[80px] rounded-full" />
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl drop-shadow-md whitespace-pre-line leading-tight">
