@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useMemo, useState } from 'react';
+import { useActionState, useMemo, useRef, useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { updateTemplateAction, type TemplateFormState } from '@/app/[lang]/admin/actions';
 import type { Dictionary, Locale } from '@/app/[lang]/dictionaries';
@@ -18,9 +18,20 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { FileInput } from '@/components/ui/file-input';
-import { LocalizedFields } from '@/components/admin/localized-fields';
+import { LocalizedFields, type LocalizedFieldsHandle } from '@/components/admin/localized-fields';
 
 const initialState: TemplateFormState = {};
+
+/** Returns the trimmed `appVersion` string from a template export, or `null` if the file isn't parseable JSON or doesn't carry one. */
+async function readAppVersionFromJsonFile(file: File): Promise<string | null> {
+  try {
+    const parsed = JSON.parse(await file.text());
+    const version = typeof parsed?.appVersion === 'string' ? parsed.appVersion.trim() : '';
+    return version || null;
+  } catch {
+    return null;
+  }
+}
 
 export function EditTemplateDialog({
   id,
@@ -40,9 +51,11 @@ export function EditTemplateDialog({
   versions: string[];
 }) {
   const [open, setOpen] = useState(false);
+  const [selectedVersion, setSelectedVersion] = useState(appVersion);
   const boundAction = useMemo(() => updateTemplateAction.bind(null, lang, id), [lang, id]);
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
   const [handledState, setHandledState] = useState(state);
+  const localizedFieldsRef = useRef<LocalizedFieldsHandle>(null);
 
   // Same render-time pattern as TemplateForm's preview reset — closing the
   // dialog on success is adjusting UI state in response to the action's
@@ -53,13 +66,24 @@ export function EditTemplateDialog({
     if (state.success) setOpen(false);
   }
 
-  // The template's own current version might not be in this build's fetched
-  // release list (an older/removed tag) — keep it selectable anyway so
+  // The selected version might not be in this build's fetched release list
+  // (the template's existing tag, or one just parsed from a replacement
+  // file, could be an older/removed one) — keep it selectable anyway so
   // opening the dialog never silently changes the version out from under it.
-  const versionOptions = versions.includes(appVersion) ? versions : [appVersion, ...versions];
+  const versionOptions =
+    selectedVersion && !versions.includes(selectedVersion) ? [selectedVersion, ...versions] : versions;
+
+  // This component (and its state) stays mounted for as long as the row
+  // does — the dialog itself just hides/shows — so a version parsed from a
+  // file picked during an edit that got cancelled would otherwise still be
+  // sitting there the next time the dialog opens.
+  const handleOpenChange = (next: boolean) => {
+    setOpen(next);
+    if (next) setSelectedVersion(appVersion);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger render={<Button type="button" variant="outline" size="icon-sm" title={dict.edit} />}>
         <Pencil />
         <span className="sr-only">{dict.edit}</span>
@@ -69,20 +93,33 @@ export function EditTemplateDialog({
           <DialogTitle>{dict.editTitle}</DialogTitle>
           <DialogDescription>{dict.editDescription}</DialogDescription>
         </DialogHeader>
-        <form action={formAction} className="flex flex-col gap-4">
+        <form
+          action={formAction}
+          className="flex flex-col gap-4"
+          onSubmit={(e) => {
+            if (!localizedFieldsRef.current?.validate()) e.preventDefault();
+          }}
+        >
           {state.error && <p className="text-sm text-destructive">{state.error}</p>}
 
           <LocalizedFields
+            ref={localizedFieldsRef}
             idPrefix={`edit-${id}`}
             nameLabel={dict.fields.name}
             descriptionLabel={dict.fields.description}
+            requiredError={dict.errors.nameRequired}
             defaultName={name}
             defaultDescription={description}
           />
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor={`edit-appVersion-${id}`}>{dict.fields.appVersion}</Label>
-            <Select name="appVersion" defaultValue={appVersion} required>
+            <Select
+              name="appVersion"
+              value={selectedVersion}
+              onValueChange={(value) => setSelectedVersion(value ?? '')}
+              required
+            >
               <SelectTrigger id={`edit-appVersion-${id}`}>
                 <SelectValue placeholder={dict.selectVersion} />
               </SelectTrigger>
@@ -104,6 +141,12 @@ export function EditTemplateDialog({
               accept="application/json"
               chooseLabel={dict.chooseFile}
               placeholder={dict.keepCurrentFile}
+              onFileChange={(file) => {
+                if (!file) return;
+                void readAppVersionFromJsonFile(file).then((version) => {
+                  if (version) setSelectedVersion(version);
+                });
+              }}
             />
           </div>
 

@@ -29,14 +29,15 @@ function FileInput({
   const [fileName, setFileName] = React.useState<string | null>(null)
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex flex-wrap items-start gap-2", className)}>
       <label
         htmlFor={id}
         className={cn(buttonVariants({ variant: "outline", size: "sm" }), "cursor-pointer shrink-0")}
       >
         {chooseLabel}
       </label>
-      <span className="truncate text-sm text-muted-foreground">{fileName ?? placeholder}</span>
+      {/* flex-1 (basis 0%) always fits the button's line, so this wraps within the remaining width instead of overflowing or truncating mid-sentence. */}
+      <span className="min-w-0 flex-1 py-1 text-sm text-muted-foreground">{fileName ?? placeholder}</span>
       <input
         id={id}
         type="file"

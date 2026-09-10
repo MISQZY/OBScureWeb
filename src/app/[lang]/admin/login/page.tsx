@@ -2,7 +2,9 @@ import { redirect, notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { hasValidSession } from '@/lib/auth/session';
 import { loginAction } from '@/app/[lang]/admin/actions';
-import { hasLocale, getDictionary } from '@/app/[lang]/dictionaries';
+import { hasLocale, getDictionary, type Locale } from '@/app/[lang]/dictionaries';
+import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -32,34 +34,39 @@ export default async function AdminLoginPage({
   if (!hasLocale(lang)) notFound();
   if (await hasValidSession()) redirect(`/${lang}/admin/template`);
   const { error } = await searchParams;
-  const dict = (await getDictionary(lang)).admin.login;
+  const fullDict = await getDictionary(lang);
+  const dict = fullDict.admin.login;
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>{dict.title}</CardTitle>
-          <CardDescription>{dict.description}</CardDescription>
-        </CardHeader>
-        <form action={loginAction.bind(null, lang)}>
-          <CardContent className="flex flex-col gap-4">
-            {error && <p className="text-sm text-destructive">{dict.invalidCredentials}</p>}
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="username">{dict.username}</Label>
-              <Input id="username" name="username" autoComplete="username" required autoFocus />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="password">{dict.password}</Label>
-              <Input id="password" name="password" type="password" autoComplete="current-password" required />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full">
-              {dict.submit}
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
+    <div className="flex min-h-screen flex-col">
+      <SiteHeader lang={lang as Locale} nav={fullDict.nav} />
+      <main className="flex flex-1 items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle>{dict.title}</CardTitle>
+            <CardDescription>{dict.description}</CardDescription>
+          </CardHeader>
+          <form action={loginAction.bind(null, lang)}>
+            <CardContent className="flex flex-col gap-4">
+              {error && <p className="text-sm text-destructive">{dict.invalidCredentials}</p>}
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="username">{dict.username}</Label>
+                <Input id="username" name="username" autoComplete="username" required autoFocus />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="password">{dict.password}</Label>
+                <Input id="password" name="password" type="password" autoComplete="current-password" required />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button type="submit" className="w-full">
+                {dict.submit}
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </main>
+      <SiteFooter lang={lang as Locale} footer={fullDict.footer} />
     </div>
   );
 }
