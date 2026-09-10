@@ -6,7 +6,7 @@ import { fetchLatestRelease } from '@/lib/github';
  * when this file was last touched, so the badge degrades to "probably still
  * right" instead of breaking.
  */
-const FALLBACK_APP_VERSION = '0.5.1';
+const FALLBACK_APP_VERSION = '0.6.0';
 
 /**
  * The current released OBScure app version — the same "newest release" data
