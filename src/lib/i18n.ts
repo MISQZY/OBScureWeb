@@ -4,6 +4,10 @@ import { defineI18nUI } from 'fumadocs-ui/i18n';
 export const i18n = defineI18n({
   defaultLanguage: 'en',
   languages: ['en', 'ru'],
+  // Docs content lives under content/docs/<lang>/... (one folder per
+  // language) instead of dot-suffixed filenames (page.ru.mdx) mixed into a
+  // single shared folder.
+  parser: 'dir',
 });
 
 export const i18nUI = defineI18nUI(i18n, {
