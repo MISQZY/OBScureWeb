@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // fumadocs-mdx's generated collection glue (see .gitignore) — regenerated
+    // on every build/dev start, never hand-edited.
+    ".source/**",
   ]),
 ]);
 
