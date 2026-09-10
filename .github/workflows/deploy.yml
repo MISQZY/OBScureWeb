@@ -21,7 +21,10 @@ permissions:
 env:
   NODE_VERSION: 22
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  # Fixed name, not derived from github.repository (which is
+  # "MISQZY/OBScureWeb", lowercasing to "obscureweb") — docker-compose.yml
+  # on the server pulls ghcr.io/misqzy/obscure:latest, so this must match.
+  IMAGE_NAME: misqzy/obscure
 
 jobs:
   check:
