@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Science_Gothic } from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import './globals.css';
 
@@ -13,12 +13,8 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const scienceGothic = Science_Gothic({
-  variable: '--font-science-gothic',
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  adjustFontFallback: false,
-});
+// Science Gothic itself is self-hosted via plain @font-face rules in
+// globals.css, not next/font/google — see the comment there for why.
 
 export const metadata: Metadata = {
   title: {
@@ -34,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${scienceGothic.variable}`} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${scienceGothic.variable} antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <RootProvider>{children}</RootProvider>
       </body>
     </html>
