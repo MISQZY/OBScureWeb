@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { FileInput } from '@/components/ui/file-input';
 import { LocalizedFields } from '@/components/admin/localized-fields';
 
@@ -82,12 +82,17 @@ export function EditTemplateDialog({
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor={`edit-appVersion-${id}`}>{dict.fields.appVersion}</Label>
-            <Select id={`edit-appVersion-${id}`} name="appVersion" defaultValue={appVersion} required>
-              {versionOptions.map((version) => (
-                <option key={version} value={version}>
-                  {version}
-                </option>
-              ))}
+            <Select name="appVersion" defaultValue={appVersion} required>
+              <SelectTrigger id={`edit-appVersion-${id}`}>
+                <SelectValue placeholder={dict.selectVersion} />
+              </SelectTrigger>
+              <SelectContent>
+                {versionOptions.map((version) => (
+                  <SelectItem key={version} value={version}>
+                    {version}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </div>
 

@@ -5,7 +5,7 @@ import { createTemplateAction, type TemplateFormState } from '@/app/[lang]/admin
 import type { Dictionary } from '@/app/[lang]/dictionaries';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { FileInput } from '@/components/ui/file-input';
 import { LocalizedFields } from '@/components/admin/localized-fields';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
@@ -56,15 +56,17 @@ export function TemplateForm({
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="appVersion">{dict.fields.appVersion}</Label>
-            <Select id="appVersion" name="appVersion" defaultValue="" required>
-              <option value="" disabled>
-                {dict.selectVersion}
-              </option>
-              {versions.map((version) => (
-                <option key={version} value={version}>
-                  {version}
-                </option>
-              ))}
+            <Select name="appVersion" required>
+              <SelectTrigger id="appVersion">
+                <SelectValue placeholder={dict.selectVersion} />
+              </SelectTrigger>
+              <SelectContent>
+                {versions.map((version) => (
+                  <SelectItem key={version} value={version}>
+                    {version}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </div>
 
