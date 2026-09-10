@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { GithubIcon as Github } from '@/components/github-icon';
 import { GITHUB_REPO_URL } from '@/lib/github';
 import type { Locale } from '@/app/[lang]/dictionaries';
@@ -24,7 +25,10 @@ export function SiteFooter({ lang, footer }: SiteFooterProps) {
     <footer className="border-t bg-background">
       <div className="container mx-auto flex flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-1">
-          <span className="font-heading font-bold text-lg tracking-tight">OBScure</span>
+          <span className="flex items-center gap-2 font-heading font-bold text-lg tracking-tight">
+            <Image src="/logo.png" alt="" width={24} height={24} className="size-6" />
+            OBScure
+          </span>
           <p className="text-sm text-muted-foreground">
             {footer?.tagline ?? 'A powerful control panel for streamers.'}
           </p>

@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   NavigationMenu,
@@ -36,8 +37,9 @@ export function SiteHeader({ lang, nav }: SiteHeaderProps) {
         <div className="mr-6 flex items-center">
           <Link
             href={lang ? `/${lang}` : '/'}
-            className="font-heading font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 font-heading font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
           >
+            <Image src="/logo.png" alt="" width={24} height={24} className="size-6" priority />
             OBScure
           </Link>
         </div>

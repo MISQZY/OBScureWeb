@@ -12,10 +12,18 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
-export const metadata: Metadata = {
-  title: 'Admin — Templates',
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
+  return {
+    title: dict.admin.template.heading,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function AdminTemplatePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;

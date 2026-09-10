@@ -10,12 +10,9 @@ export async function generateMetadata({
   params,
 }: PageProps<'/[lang]'>): Promise<Metadata> {
   const { lang } = await params;
+  const dict = await getDictionary(lang);
   return {
-    title: lang === 'ru' ? 'OBScure — Документация' : 'OBScure Documentation',
-    description:
-      lang === 'ru'
-        ? 'Документация для Electron-приложения OBScure.'
-        : 'Documentation for the OBScure Electron application.',
+    description: dict.home.description,
   };
 }
 

@@ -11,10 +11,18 @@ import type { Locale } from '@/app/[lang]/dictionaries';
 import { listTemplates, pickLocalized } from '@/lib/templates/store';
 import { fetchLatestAppVersion, compareVersions } from '@/lib/app-version';
 
-export const metadata: Metadata = {
-  title: 'Templates',
-  description: 'Ready-made overlay scene templates for OBScure.',
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
+  return {
+    title: dict.templates.title,
+    description: dict.templates.description,
+  };
+}
 
 export default async function TemplatesPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
