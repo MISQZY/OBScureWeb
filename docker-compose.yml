@@ -5,8 +5,11 @@ services:
     # package to be public (or the host to `docker login ghcr.io` first).
     image: ghcr.io/misqzy/obscure:latest
     container_name: obscure_web
+    # 3000 was already taken on the host by another container — 3001 is just
+    # for direct/loopback debugging; Caddy reaches the app over proxy-network
+    # at obscure_web:3000, not through this published port.
     ports:
-      - '3000:3000'
+      - '127.0.0.1:3001:3000'
     env_file:
       - .env
     environment:
@@ -14,7 +17,15 @@ services:
       TEMPLATES_DATA_DIR: /data/templates
     volumes:
       - templates-data:/data/templates
+    networks:
+      - default
+      - proxy-network
     restart: unless-stopped
+
+networks:
+  # Created by the Caddy stack — this only attaches to it, doesn't own it.
+  proxy-network:
+    external: true
 
 volumes:
   templates-data:
