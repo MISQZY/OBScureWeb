@@ -210,3 +210,12 @@
     display: none;
   }
 }
+
+/* Same #nd-toc/#nd-subnav ordering issue as above: fumadocs' mobile sidebar
+   drawer relies on `empty:hidden` to collapse its footer slot when nothing
+   is passed to it (we don't pass one), but `.flex{}` lands after
+   `.empty\:hidden:empty{}` too — so instead of collapsing, it shows as an
+   empty bordered/padded strip at the bottom of the drawer. */
+.empty\:hidden:empty {
+  display: none;
+}
