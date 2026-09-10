@@ -12,6 +12,7 @@ import { listTemplates, pickLocalized, type TemplateRecord } from '@/lib/templat
 import { fetchLatestAppVersion, compareVersions } from '@/lib/app-version';
 import { cn } from '@/lib/utils';
 import { TemplatesSort } from '@/components/templates-sort';
+import { TemplatesFilter } from '@/components/templates-filter';
 import { isSortValue, type SortValue } from '@/lib/templates/sort';
 
 function sortTemplates(templates: TemplateRecord[], sort: SortValue): TemplateRecord[] {
@@ -38,14 +39,17 @@ export default async function TemplatesPage({
   searchParams,
 }: {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ sort?: string }>;
+  searchParams: Promise<{ sort?: string; onlyCurrent?: string }>;
 }) {
   const { lang } = await params;
-  const { sort: sortParam } = await searchParams;
+  const { sort: sortParam, onlyCurrent: onlyCurrentParam } = await searchParams;
   const sort: SortValue = isSortValue(sortParam ?? null) ? (sortParam as SortValue) : 'newest';
+  const onlyCurrent = onlyCurrentParam === '1';
   const dict = await getDictionary(lang);
   const [allTemplates, latestVersion] = await Promise.all([listTemplates(), fetchLatestAppVersion()]);
-  const templates = sortTemplates(allTemplates, sort);
+  const isOutdated = (template: TemplateRecord) => compareVersions(latestVersion, template.appVersion) > 0;
+  const filtered = onlyCurrent ? allTemplates.filter((template) => !isOutdated(template)) : allTemplates;
+  const templates = sortTemplates(filtered, sort);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -56,56 +60,61 @@ export default async function TemplatesPage({
           <p className="text-muted-foreground">{dict.templates.description}</p>
         </div>
 
-        {templates.length === 0 ? (
+        {allTemplates.length === 0 ? (
           <p className="py-16 text-center text-muted-foreground">{dict.templates.empty}</p>
         ) : (
           <>
-            <div className="mb-6 flex justify-end">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+              <TemplatesFilter onlyCurrent={onlyCurrent} label={dict.templates.onlyCurrent} />
               <TemplatesSort sort={sort} dict={dict.templates.sort} />
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {templates.map((template) => {
-                const outdated = compareVersions(latestVersion, template.appVersion) > 0;
-                const name = pickLocalized(template.name, lang);
-                const description = pickLocalized(template.description, lang);
-                return (
-                  <Card key={template.id} className="relative overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`/api/templates/${template.id}/preview`}
-                      alt={name}
-                      loading="lazy"
-                      className="aspect-video w-full object-cover"
-                    />
-                    <Badge
-                      className={cn(
-                        'absolute top-2 right-2 z-10 border-white/20 bg-black/60 text-white backdrop-blur-sm',
-                        outdated && 'border-amber-400/40 text-amber-300',
+            {templates.length === 0 ? (
+              <p className="py-16 text-center text-muted-foreground">{dict.templates.noMatches}</p>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {templates.map((template) => {
+                  const outdated = isOutdated(template);
+                  const name = pickLocalized(template.name, lang);
+                  const description = pickLocalized(template.description, lang);
+                  return (
+                    <Card key={template.id} className="relative overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`/api/templates/${template.id}/preview`}
+                        alt={name}
+                        loading="lazy"
+                        className="aspect-video w-full object-cover"
+                      />
+                      <Badge
+                        className={cn(
+                          'absolute top-2 right-2 z-10 border-white/20 bg-black/60 text-white backdrop-blur-sm',
+                          outdated && 'border-amber-400/40 text-amber-300',
+                        )}
+                      >
+                        v{template.appVersion}
+                      </Badge>
+                      <CardHeader>
+                        <CardTitle>{name}</CardTitle>
+                        {description && <CardDescription>{description}</CardDescription>}
+                      </CardHeader>
+                      {outdated && (
+                        <CardContent>
+                          <p className="text-xs text-muted-foreground">{dict.templates.outdatedHint}</p>
+                        </CardContent>
                       )}
-                    >
-                      v{template.appVersion}
-                    </Badge>
-                    <CardHeader>
-                      <CardTitle>{name}</CardTitle>
-                      {description && <CardDescription>{description}</CardDescription>}
-                    </CardHeader>
-                    {outdated && (
-                      <CardContent>
-                        <p className="text-xs text-muted-foreground">{dict.templates.outdatedHint}</p>
-                      </CardContent>
-                    )}
-                    <CardFooter>
-                      <Link href={`/api/templates/${template.id}/file`} className="w-full">
-                        <Button className="w-full gap-2">
-                          <Download className="size-4" />
-                          {dict.templates.download}
-                        </Button>
-                      </Link>
-                    </CardFooter>
-                  </Card>
-                );
-              })}
-            </div>
+                      <CardFooter>
+                        <Link href={`/api/templates/${template.id}/file`} className="w-full">
+                          <Button className="w-full gap-2">
+                            <Download className="size-4" />
+                            {dict.templates.download}
+                          </Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
           </>
         )}
       </main>

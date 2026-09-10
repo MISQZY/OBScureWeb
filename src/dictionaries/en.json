@@ -13,6 +13,7 @@
     "title": "Templates",
     "description": "Ready-made overlay scenes, exported from OBScure's Scene Builder — download one and import it straight into your own copy of the app.",
     "empty": "No templates yet. Check back soon.",
+    "noMatches": "No templates match this filter.",
     "outdatedHint": "Built for an older OBScure version — it may still import fine, but double check after importing.",
     "download": "Download",
     "sort": {
@@ -20,7 +21,8 @@
       "newest": "Newest",
       "versionDesc": "Version (high to low)",
       "versionAsc": "Version (low to high)"
-    }
+    },
+    "onlyCurrent": "Only up to date"
   },
   "admin": {
     "login": {
