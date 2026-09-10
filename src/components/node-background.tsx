@@ -106,9 +106,11 @@ export function NodeBackground() {
     };
 
     const drawGrid = (isDark: boolean) => {
-      ctx.fillStyle = isDark ? '#ffffff10' : '#00000010';
+      // React Flow's own default dot-grid background: gap 20, radius 1, a
+      // solid mid-gray rather than a near-invisible tinted-foreground dot.
+      ctx.fillStyle = isDark ? '#52525b' : '#91919a';
       const dotSize = 1;
-      const spacing = 24;
+      const spacing = 20;
       for (let x = 0; x < width; x += spacing) {
         for (let y = 0; y < height; y += spacing) {
           ctx.beginPath();
