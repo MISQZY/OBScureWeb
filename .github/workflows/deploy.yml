@@ -5,7 +5,7 @@ on:
     types: [published]
   workflow_dispatch:
   push:
-    branches: [master]
+    branches: [main]
 
 # Only one run per ref at a time — a new push (or re-run) cancels whatever
 # was already in flight for that same branch/tag instead of queuing behind it.
