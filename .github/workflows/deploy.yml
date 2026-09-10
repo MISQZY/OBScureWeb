@@ -44,6 +44,12 @@ jobs:
       - name: Lint
         run: npx eslint .
 
+      # tsc needs .source/ (fumadocs-generated content types) and
+      # .next/dev/types (Next's PageProps<'/...'> route types) on disk —
+      # neither exists on a fresh checkout, only after next dev/build runs.
+      - name: Generate types
+        run: npx next typegen
+
       - name: Typecheck
         run: npx tsc --noEmit
 
