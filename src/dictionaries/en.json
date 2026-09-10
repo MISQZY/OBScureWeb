@@ -3,6 +3,12 @@
     "documentation": "Documentation",
     "templates": "Templates"
   },
+  "footer": {
+    "documentation": "Documentation",
+    "templates": "Templates",
+    "github": "GitHub",
+    "tagline": "A powerful control panel for streamers."
+  },
   "templates": {
     "title": "Templates",
     "description": "Ready-made overlay scenes, exported from OBScure's Scene Builder — download one and import it straight into your own copy of the app.",

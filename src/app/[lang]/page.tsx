@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import type { Metadata } from 'next';
 import { getDictionary, hasLocale } from './dictionaries';
 import { NodeBackground } from '@/components/node-background';
@@ -49,6 +50,7 @@ export default async function LocalizedHomePage({ params }: PageProps<'/[lang]'>
           <ReleasesSection lang={lang} />
         </section>
       </main>
+      <SiteFooter lang={lang} footer={dict.footer} />
     </div>
   );
 }

@@ -3,6 +3,12 @@
     "documentation": "Документация",
     "templates": "Шаблоны"
   },
+  "footer": {
+    "documentation": "Документация",
+    "templates": "Шаблоны",
+    "github": "GitHub",
+    "tagline": "Мощная панель управления для стримеров."
+  },
   "templates": {
     "title": "Шаблоны",
     "description": "Готовые сцены оверлеев, экспортированные из Scene Builder OBScure — скачайте и импортируйте прямо в своё приложение.",

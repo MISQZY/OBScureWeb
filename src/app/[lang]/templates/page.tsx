@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Download } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -70,6 +71,7 @@ export default async function TemplatesPage({ params }: { params: Promise<{ lang
           </div>
         )}
       </main>
+      <SiteFooter lang={lang as Locale} footer={dict.footer} />
     </div>
   );
 }
