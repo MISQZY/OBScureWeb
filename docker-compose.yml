@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    environment:
+      # Fixed to the volume mount below — not meant to be overridden per env.
+      TEMPLATES_DATA_DIR: /data/templates
+    volumes:
+      - templates-data:/data/templates
+    restart: unless-stopped
+
+volumes:
+  templates-data:

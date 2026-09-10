@@ -1,4 +1,4 @@
-import { fetchLatestRelease } from '@/lib/github';
+import { fetchLatestRelease, fetchReleases } from '@/lib/github';
 
 /**
  * Used only if the GitHub API is unreachable at request time (rate-limited,
@@ -21,6 +21,20 @@ export async function fetchLatestAppVersion(): Promise<string> {
   // Release tags are typically "v0.5.1" — strip the leading "v" so this
   // matches the bare "0.5.1" shape every page's own appVersion uses.
   return latest.tag_name.trim().replace(/^v/i, '') || FALLBACK_APP_VERSION;
+}
+
+/**
+ * Every released OBScure version (newest first, bare `major.minor.patch`
+ * strings) — backs the "App version" dropdown in the templates admin panel
+ * instead of a free-text field, so a template can only ever be tagged with a
+ * version that actually shipped. Falls back to just the last known version
+ * if GitHub is unreachable, same reasoning as fetchLatestAppVersion above —
+ * an empty dropdown would make the form impossible to submit.
+ */
+export async function fetchAvailableAppVersions(): Promise<string[]> {
+  const releases = await fetchReleases();
+  const versions = releases.map((r) => r.tag_name.trim().replace(/^v/i, '')).filter(Boolean);
+  return versions.length > 0 ? versions : [FALLBACK_APP_VERSION];
 }
 
 /**

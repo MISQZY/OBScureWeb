@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.data
+.source
+npm-debug.log*
+
+# local knowledge base (see .gitignore) — never part of the image
+/docs
+
+.env*
+!.env.example

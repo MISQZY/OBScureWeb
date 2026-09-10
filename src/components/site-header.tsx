@@ -9,7 +9,6 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LangSwitcher } from '@/components/lang-switcher';
@@ -18,7 +17,6 @@ import type { Locale } from '@/app/[lang]/dictionaries';
 interface NavDict {
   documentation: string;
   templates: string;
-  soon: string;
 }
 
 interface SiteHeaderProps {
@@ -67,9 +65,6 @@ export function SiteHeader({ lang, nav }: SiteHeaderProps) {
                 )}
               >
                 {nav?.templates ?? 'Templates'}
-                <Badge variant="secondary" className="ml-2 text-[10px] py-0 px-1.5">
-                  {nav?.soon ?? 'Soon'}
-                </Badge>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>

@@ -32,6 +32,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# local filesystem store for templates (TEMPLATES_DATA_DIR default) — in
+# Docker this data lives on a mounted volume instead, never in the image/repo
+/.data/
 
 # vercel
 .vercel

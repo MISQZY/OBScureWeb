@@ -1,8 +1,65 @@
 {
   "nav": {
     "documentation": "Documentation",
-    "templates": "Templates",
-    "soon": "Soon"
+    "templates": "Templates"
+  },
+  "templates": {
+    "title": "Templates",
+    "description": "Ready-made overlay scenes, exported from OBScure's Scene Builder — download one and import it straight into your own copy of the app.",
+    "empty": "No templates yet. Check back soon.",
+    "forVersion": "For OBScure {version}",
+    "outdatedHint": "Built for an older OBScure version — it may still import fine, but double check after importing.",
+    "download": "Download"
+  },
+  "admin": {
+    "login": {
+      "title": "Admin sign in",
+      "description": "Manage OBScure templates.",
+      "invalidCredentials": "Invalid username or password.",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Sign in"
+    },
+    "template": {
+      "heading": "Templates admin",
+      "signOut": "Sign out",
+      "formTitle": "Add template",
+      "submit": "Add template",
+      "submitting": "Uploading…",
+      "added": "Template added.",
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "appVersion": "App version",
+        "jsonFile": "Template file (.json)",
+        "previewFile": "Preview image"
+      },
+      "chooseFile": "Choose file",
+      "noFileChosen": "No file chosen",
+      "keepCurrentFile": "Leave empty to keep the current file",
+      "selectVersion": "Select a version",
+      "existing": "Existing templates ({count})",
+      "empty": "No templates yet.",
+      "edit": "Edit",
+      "editTitle": "Edit template",
+      "editDescription": "Update the details, or replace a file — leave a file field empty to keep what's already uploaded.",
+      "cancel": "Cancel",
+      "saveChanges": "Save changes",
+      "delete": "Delete",
+      "deleteTitle": "Delete \"{name}\"",
+      "deleteConfirm": "Delete template \"{name}\"? This cannot be undone.",
+      "errors": {
+        "nameRequired": "Name is required.",
+        "appVersionRequired": "App version is required.",
+        "jsonRequired": "Template file is required.",
+        "previewRequired": "Preview image is required.",
+        "previewMustBeImage": "Preview must be an image file.",
+        "jsonTooLarge": "Template file is too large (max 5MB).",
+        "previewTooLarge": "Preview image is too large (max 5MB).",
+        "invalidJson": "Template file is not valid JSON.",
+        "notFound": "This template no longer exists."
+      }
+    }
   },
   "home": {
     "title": "Supercharge your stream\nwith OBScure",

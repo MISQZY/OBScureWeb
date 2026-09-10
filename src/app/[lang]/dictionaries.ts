@@ -15,3 +15,6 @@ export const getDictionary = async (locale: string) => {
   if (!hasLocale(locale)) notFound();
   return dictionaries[locale]();
 };
+
+/** Shape of a resolved dictionary — reused by client components (see admin/template-form.tsx) that receive a slice of it as a prop instead of calling getDictionary themselves. */
+export type Dictionary = Awaited<ReturnType<typeof getDictionary>>;
