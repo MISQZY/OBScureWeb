@@ -1,6 +1,10 @@
 services:
   web:
-    build: .
+    # Built and pushed by CI (.github/workflows/deploy.yml), not built here —
+    # deploy.sh just pulls this tag. Requires the ghcr.io/misqzy/obscure
+    # package to be public (or the host to `docker login ghcr.io` first).
+    image: ghcr.io/misqzy/obscure:latest
+    container_name: obscure_web
     ports:
       - '3000:3000'
     env_file:

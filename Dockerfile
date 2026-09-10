@@ -29,6 +29,13 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Pre-create and chown the templates volume mount point so Docker seeds a
+# fresh named volume (see docker-compose.yml) with nextjs ownership instead
+# of root — the app runs as nextjs and mkdir()s subfolders under this path
+# at runtime (see src/lib/templates/store.ts).
+RUN mkdir -p /data/templates && chown -R nextjs:nodejs /data/templates
+VOLUME /data/templates
+
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
