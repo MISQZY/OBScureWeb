@@ -187,8 +187,26 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
   html {
     font-family: var(--font-science-gothic), sans-serif !important;
+    scrollbar-gutter: stable;
+  }
+}
+
+/* Merging fumadocs-ui's precompiled style.css with our Tailwind build puts
+   `.flex{display:flex}` after fumadocs' `max-xl:hidden`/`md:hidden`, so
+   #nd-toc/#nd-subnav (both `flex` + a responsive `hidden`) never actually
+   hide. Unlayered so it wins regardless of source order. */
+@media (width < 80rem) {
+  #nd-toc {
+    display: none;
+  }
+}
+
+@media (width >= 48rem) {
+  #nd-subnav {
+    display: none;
   }
 }

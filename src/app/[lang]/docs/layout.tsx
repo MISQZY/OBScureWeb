@@ -20,7 +20,6 @@ export default async function Layout({
     <DocsLayout
       tree={source.pageTree[lang]}
       nav={{
-        enabled: false,
         title: (
           <span className="flex items-center gap-2 font-heading font-bold text-xl tracking-tight">
             <Image src="/logo.png" alt="" width={24} height={24} className="size-6" />

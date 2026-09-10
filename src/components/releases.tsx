@@ -32,7 +32,7 @@ export async function ReleasesSection({ lang }: { lang: Locale }) {
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-12 py-12 px-4 relative z-10">
       <Card className="relative w-full bg-background/60 backdrop-blur-md border-border/50 shadow-2xl overflow-hidden">
-        <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500" />
+        <div className="absolute top-0 left-0 h-full w-1 bg-linear-to-b from-blue-500 via-purple-500 to-pink-500" />
         <CardHeader className="pb-4">
           <div className="flex justify-between items-start flex-wrap gap-4">
             <div>
@@ -46,8 +46,8 @@ export async function ReleasesSection({ lang }: { lang: Locale }) {
                 })}
               </CardDescription>
             </div>
-            <div className="flex items-center gap-2">
-              <ChangelogDialog 
+            <div className="flex flex-wrap items-center gap-2">
+              <ChangelogDialog
                 version={latest.tag_name} 
                 notes={latest.notes} 
                 buttonText={dict.home.viewChangelog}
@@ -93,7 +93,7 @@ export async function ReleasesSection({ lang }: { lang: Locale }) {
       {previous.length > 0 && (
         <div className="flex flex-col gap-4">
           <h3 className="text-xl font-bold tracking-tight px-2">{dict.home.previousVersions}</h3>
-          <div className="bg-background/40 backdrop-blur-sm rounded-xl border border-border/50 flex flex-col overflow-hidden max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-border">
+          <div className="bg-background/40 backdrop-blur-sm rounded-xl border border-border/50 flex flex-col overflow-hidden max-h-100 overflow-y-auto scrollbar-thin scrollbar-thumb-border">
             {previous.map((release, i) => (
               <div 
                 key={release.id} 
@@ -108,9 +108,9 @@ export async function ReleasesSection({ lang }: { lang: Locale }) {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2">
-                  <ChangelogDialog 
-                    version={release.tag_name} 
+                <div className="flex flex-wrap items-center gap-2">
+                  <ChangelogDialog
+                    version={release.tag_name}
                     notes={release.notes} 
                     buttonText={dict.home.viewChangelog}
                     titleText={dict.home.changelogTitle}

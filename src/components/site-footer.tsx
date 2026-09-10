@@ -34,7 +34,7 @@ export function SiteFooter({ lang, footer }: SiteFooterProps) {
           </p>
         </div>
 
-        <nav className="flex items-center gap-6 text-sm text-muted-foreground">
+        <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <Link href={docsHref} className="hover:text-foreground transition-colors">
             {footer?.documentation ?? 'Documentation'}
           </Link>
